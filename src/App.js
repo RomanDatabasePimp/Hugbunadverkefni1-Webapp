@@ -9,6 +9,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import NavBar from './components/nav/Nav';
 import NotFound from './routers/notFound';
 import Home from './routers/home';
+import Chat from './routers/chat';
 import './App.css';
 
 /* ------------------------------------------------------------------------------
@@ -26,7 +27,7 @@ export default  class App extends Component {
         <main className='main'>
           {/* Tiltill á vefsiðuni verður alltaf xxx - (nafn af nemfelagi) */}
           <Helmet defaultTitle='Felag' titleTemplate='%s – Felag' />
-          
+          <Chat></Chat>
           {/* Navigationbar Component */}
           <NavBar />
           
