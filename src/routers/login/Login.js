@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
-import SockJS from 'sockjs-client';
 
-export default class Home extends Component {
-
+export default class Login extends Component {
 
   render() {
     return (
       <div>
-     
+        <p>Login</p>
       </div>
     );
   }
 }
-

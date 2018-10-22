@@ -8,19 +8,19 @@ import { Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-/* ------------------------------------------------------------------------------
-   ------------------------IMPORTS End-------------------------------------------
-   ------------------------------------------------------------------------------*/
-
 import thunk from 'redux-thunk';
-//import rootReducer from './reducers';  MUNA Að Uncommenta
+import rootReducer from './reducers';
 import App from './App';
 import history from './history';
 import './index.css';
 
+/* ------------------------------------------------------------------------------
+   ------------------------IMPORTS End-------------------------------------------
+   ------------------------------------------------------------------------------*/
+
 /* verkefni sett upp til að styðja async actions í redux ef þurfum */
 const store = createStore(
-  //rootReducer,      MUNA Að Uncommenta
+  rootReducer,
   applyMiddleware(thunk)
 );
 
