@@ -42,9 +42,8 @@ function registerReset() {
 }
 
 /* Notkun : dispach(registerUser(data))
-    Fyrir : data er jsonobj
-    Eftir : sendir á Heroku json obj með Post fyrirpurn or skilar
-            það sem heroku skilar */
+    Fyrir : data is a  json obj
+    Eftir : Sends a http POST request on our Spring boot api */
 export const registerUser = (data) => {
   return async (dispatch) => {
     dispatch(requestRegister());

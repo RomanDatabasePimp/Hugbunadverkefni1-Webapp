@@ -11,7 +11,7 @@ import NotFound from './routers/notFound';
 import UserRoute from './components/user-route';
 import Home from './routers/home';
 import Login from './routers/login';
-import HttpTest from './routers/HttpTest';
+import Register from './routers/register';
 import './App.css';
 
 /* ------------------------------------------------------------------------------
@@ -30,22 +30,14 @@ class App extends Component {
         <main className='main row center-xs'>
           {/* Tiltill á vefsiðuni verður alltaf (nafn af appi) - xxx  */}
           <Helmet defaultTitle='VeryWowChat' titleTemplate='VeryWow - %s ' />
-      <HttpTest></HttpTest>
+    
           {/* allt innihald siðu er birtur i þessum element 
             það verður athugað slóðina sem notandi er staddur á
             og switch og Router munu sjá um að byrta réttan route */}
           <div className="">
             <Switch location={this.props.location}>
-              <Route path='/login' exact component={Login} />
-              {/* UserRoute er componenti sem chekkar hvort notandi er skráður inn
-                  eða ekki og ef hann er skráður inn þá er visað honum i chatt appið
-                  annars visar hann á loggin siðuna */}
-              <UserRoute path='/' authenticated={this.props.isAuthenticated} component={Home} />
-              {/* S.S til að koma i veg fyrir að notandi gæti búið til ny accounts á meðan hann er skráður inn
-                  við neyðum hann að fara yfir UserRoute en við neitum isAuthenticated 
-                  <UserRoute path='/register' authenticated={!this.props.isAuthenticated} component={Home} />
-                  */}
-              
+              <Route path='/register' exact component={Register} />
+              <UserRoute path='/register' authenticated={this.props.isAuthenticated} component={Register} />
               {/* ef ekkert af þessu passaði þá er byrt villu siðu */}
               <Route component={NotFound} />
             </Switch>

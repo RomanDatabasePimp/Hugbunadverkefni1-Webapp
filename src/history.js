@@ -1,3 +1,3 @@
-/* Þetta er trick til að láta history virka */
+/* a trick to make history work */
 import { createBrowserHistory } from 'history';
 export default createBrowserHistory()
