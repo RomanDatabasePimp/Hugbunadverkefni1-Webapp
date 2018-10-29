@@ -11,6 +11,7 @@ import NotFound from './routers/notFound';
 import UserRoute from './components/user-route';
 import Home from './routers/home';
 import Login from './routers/login';
+import HttpTest from './routers/HttpTest';
 import './App.css';
 
 /* ------------------------------------------------------------------------------
@@ -25,14 +26,15 @@ class App extends Component {
     render() {
       
       return (
-        <main className='main'>
-          {/* Tiltill á vefsiðuni verður alltaf xxx - (nafn af appi) */}
-          <Helmet defaultTitle='VeryWowChat' titleTemplate='%s – VeryWowChat' />
-
+        /* NOTICE PLEASE i am using flex box pakage so the css code is not in any .css files  */
+        <main className='main row center-xs'>
+          {/* Tiltill á vefsiðuni verður alltaf (nafn af appi) - xxx  */}
+          <Helmet defaultTitle='VeryWowChat' titleTemplate='VeryWow - %s ' />
+      <HttpTest></HttpTest>
           {/* allt innihald siðu er birtur i þessum element 
             það verður athugað slóðina sem notandi er staddur á
             og switch og Router munu sjá um að byrta réttan route */}
-          <div className="main__content">
+          <div className="">
             <Switch location={this.props.location}>
               <Route path='/login' exact component={Login} />
               {/* UserRoute er componenti sem chekkar hvort notandi er skráður inn

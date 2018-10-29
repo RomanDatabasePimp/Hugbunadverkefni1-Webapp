@@ -8,3 +8,8 @@
 .main__content {
   padding:1em;
 }
+
+.form_wrapper {
+  border-radius: 15px;
+  background-color: #403075;
+}

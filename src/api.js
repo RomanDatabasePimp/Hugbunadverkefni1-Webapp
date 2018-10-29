@@ -1,108 +1,84 @@
 require('dotenv').config();
 
-/* sótt Url úr .env skjali */
-const {
-  // ef þið gleymdu að bæta i .evn 
-  APP_SERVICE_URL: baseurl = 'http://locahost:8080',
+/* fetched from the .evn file */
+const { 
+  APP_SERVICE_URL: baseurl  = 'http://localhost:9090/',// just incase if you forgget the env file
 } = process.env;
 
-/* Notkun : nodatarequest(endpoint, method)
-   Fyrir  : endpoint er strengur
-            method er strengur sem á að vera GET - DELETE
-   Eftir  : Gerir method Request á baseurlið/endpoint 
-            og skilar json obj sem Serverin skilar ásamt statuskóða */
-export async function nodatarequest(endpoint, method) {
-  // sótt er Token sem er geymdur i  local storage
+/* Usage : noDataRequest(endpoint, method)
+   For   : endpoint is a string
+            method string represents a HTTP Method
+   After : performs the method on  baseur/endpoint 
+            and returns the json obj with the status code */
+export async function noDataRequest(endpoint, method) {
+  // If the token exists we will send it along
   const token = window.localStorage.getItem('token');
-  // samskeytt saman Url 
+  // concat our wanted url
   const url = `${baseurl}${endpoint}`;
-  // stillingar fyrir fyrirspurnir
+  // options for the http request
   const options = {
     headers: { },
     method: method,
   };
   let response = null;
-  /* ef tóken er til það er sett hann með Get fyrirspurni
-    annars það er bara sent urlið */
+  /* if we have the JWT we send it along sometimes u dont want and sometimes
+     you need so insted of making two different functions its better just send
+     the token along for the ride */
   if (token) {
     options.headers['Authorization'] = `Bearer ${token}`;
     response = await fetch(url, options);
   } else {
     response = await fetch(url);
   }
-  /* ef statur kóðin væri 204 það þyðir að það kom ekkert result með
-     þannig við skilum null og status kóða */
-  if(response.status === 204) {
-    return { result: null, status: response.status };
-  }
-  // ef status kóði er ekki 204 þá eru til einhverskonar gögn frá vefjónustuni og við skilum þau
-  
-  // sótt json frá server
-  const result = await response.json();
-
-  // skilum json obj og status kóða sem var fært
+  /* if the status code is 204 then we know there was not result */
+  if(response.status === 204) { return { result: null, status: response.status }; }
+  /* Since we are 3 working on the Spring Boot api we have a rule that everything we send out
+     has to be wrapped to handle it better on this end  we have 2 wrappers BadResp and GoodResp 
+     There could be anything inside these responses (looks stupid but we need to have somekind of rule) */   
+  let result = await response.json();
+  /* Spring boot has its own handler for many various unimplemented or server error responses so we need 
+    implement somekind of catch for that so our react wont go ups  its own ass*/
+  if(result.hasOwnProperty("message")){ return { result: null, status: response.status }; }
+  // check whitch wrapper do we peel
+  if(response.status >= 200 && response.status < 300 ) { result = result.GoodResp; }
+  if(response.status >= 400 && response.status < 500 ) { result = result.BadResp; }
+  // return the json  along with the status code
   return { result, status: response.status };
 }
 
-/* Notkun : datarequest(endpoint, data, method)
-   Fyrir  : endpoint er strengur
-            data er json obj með mismunandi properties
-            method er strengur
-   Efitir : frammkvæmir method fyrirspurn með data sem ver sent
-            og skilar json obj og status kóða sem Server skilaði */
+/* Usage  : datarequest(endpoint, data, method)
+   For    : endpoint is a string
+            data is a json obj with various properties
+            method string represents a HTTP Method
+   After  : Processes the http method and send the data along and returns
+            json obj with a status code */
 export async function datarequest(endpoint, data, method) {
-  // sótt er Token sem er geymdur i  local storage
+  // Again same thing with the token if it exists we take it with us
   const token = window.localStorage.getItem('token');
-  // buið til url sem við viljum senda á
+  // create the url
   const url = `${baseurl}${endpoint}`;
-  
-  //stillingar fyrirspurnir
+  // set our options
   const options = {
-    body: JSON.stringify(data), //gögn frá body verða vera á json formi
+    body: JSON.stringify(data), // data from body will be in json format
     headers: {
-      'content-type': 'application/json', // segjum að við erum að senda json
+      'content-type': 'application/json', // tell that we are sending json
     },
-    method: method, // taka framm að þetta er post fyrirspurn
+    method: method, // specify our method
   };
-
   let response = null;
-  /* ef tóken er til það er sett hann með Get fyrirspurni
-    annars það er bara sent urlið */
+  /* again same stuff with the token */
   if (token) {
     options.headers['Authorization'] = `Bearer ${token}`;
     response = await fetch(url, options);
   } else {
     response = await fetch(url,options);
   }
-  // sækja json obj frá heroku
-  const result = await response.json();
-  // skilað json obj og status kóðan
-  return { result, status: response.status };
-}
-
-/* Notkun : formdatarequest(endpoint, data)
-    Fyrir : endpoint er strengur
-            data er gögn úr body
-    Eftir : frammkvæmir PATCH fyrir spurn með data
-            og skilar json obj og status kóðan */
-export async function formdatarequest(endpoint, data) {
-  // sótt er Token sem er geymdur i  local storage
-  const token = window.localStorage.getItem('token');
-  // buið til url sem við viljum senda á
-  const url = `${baseurl}${endpoint}`;
-
-  //stillingar fyrirspurnir
-  const options = {
-    body: data, //gögn frá body
-    method: 'POST',
-    headers: {},
-  };
-
-  options.headers['Authorization'] = `Bearer ${token}`;
-  const response = await fetch(url, options);
-  
-  // sækja json obj frá heroku
-  const result = await response.json();
-  // skilað json obj og status kóðan
+  // same proccess as in noDataRequest
+  let result = await response.json();
+  if(result.hasOwnProperty("message")){ return { result: null, status: response.status }; }
+  // check whitch wrapper do we peel
+  if(response.status >= 200 && response.status < 300 ) { result = result.GoodResp; }
+  if(response.status >= 400 && response.status < 500 ) { result = result.BadResp; }
+  // return the json  along with the status code
   return { result, status: response.status };
 }
