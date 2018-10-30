@@ -63,7 +63,7 @@ class Login extends Component {
 
     // ef hann er ekki skráður inn þá byrtum innskráningar form
     return (
-    <div></div>
+    <div>hello</div>
     );
   }
 }

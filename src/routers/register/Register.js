@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Button from '../../components/button';
 import Helmet from 'react-helmet';
+import {Col,Row} from 'react-bootstrap';
 
 class Register extends Component {
 
@@ -51,63 +52,71 @@ class Register extends Component {
     const { userName, displayName, password,passwordReap,email } = this.state; // we can work with the states
     const { isFetching, isRegistrated, message } = this.props; // get our props
     // if errors exist then we create a ErrorList out of them
-    console.log(message);
-    const errorsExist = message ?<p> {message.errors[0].errors}</p> : <p></p>;
-    // if the data is beeing fetched we notify the client that registration is beeing worked on
+    console.log("message :"+message);
+    const errorsExist = message ?<p> {message}</p> : <p></p>;
+    // if the data is beeing fetched we show a cool little spinnier to indicate the request is in proccsses
     if (isFetching) {
-      return (<div className=''><span>Registrating</span><Helmet title='...'></Helmet></div>);
+      return (<section className="vertical-center">
+                <Col xs={10} md={5} sm={6} center="true" className="form-box ">
+                  <Helmet title='Processing'></Helmet>
+                  <div className="loader"></div>
+                </Col>
+              </section>);
     }
+    /* if the register was successfull we show this insted */
     if (isRegistrated) {
-        return (<div className=''>
-                  <Helmet title='Registrated '></Helmet>
-                  <h1> User created ! </h1>
-                  <p>Before you can login, you need to go to your email and open the validation link</p>
-                </div>);
+        return (<section className="vertical-center">
+                  <Col xs={10} md={5} sm={6} center="true" className="form-box ">
+                    <Helmet title='Registrated'></Helmet>
+                    <h1> User created ! </h1>
+                    <p>Before you can login, you need to go to your email and open the validation link</p>  
+                  </Col>
+                </section>);
     }
    
     // and now comes the real pain in the ass
     return (
-        <div className=''>
-        <Helmet title='Registration'></Helmet>
-        <div className=''>
-          <h1> Registration </h1>
-          {errorsExist}
-         
+      <section className="vertical-center">
+        <Col xs={10} md={5} sm={6} center="true" className="form-box ">
+          <Helmet title='Registration'></Helmet>
+          <h1 className="form_headder">Registration</h1>
+          {errorsExist} {/* if Errors exists it will be printed above the registration form */}
           <form onSubmit={this.handleSubmit}>
-
-            <div className=''>
-              <label htmlFor="userName">Username:</label>
-              <input className='' type="text" name="userName" required value={userName} onChange={this.handleInputChange} />
+            {/* Username input */}
+            <div className="form-group">
+              <label htmlFor="userName">Username </label>
+              <input className="form-control" type="text" name="userName" required value={userName} onChange={this.handleInputChange} placeholder="Username" />
+              <small className="form-text text-muted"> You will use the username to login</small>
+            </div>
+            {/* Display name  input */}
+            <div className="form-group">
+              <label htmlFor="displayName">Display name </label>
+              <input className="form-control" type="text" name="displayName" required value={displayName} onChange={this.handleInputChange} placeholder="Display name" />
+              <small className="form-text text-muted"> How others will see you as (can be changed later)</small>
+            </div>
+            {/* password input */}
+            <div className="form-group">
+              <label htmlFor="password">Password </label>
+              <input className="form-control" type="password" name="password" required value={password} onChange={this.handleInputChange} placeholder="Password" />
+              <small className="form-text text-muted"> We will never share your password with anyone</small>
+            </div>
+            {/* reapeat password input */}
+            <div className="form-group">
+              <label htmlFor="passwordReap">Repeat Password </label>
+              <input className="form-control" type="password" name="passwordReap" required value={passwordReap} onChange={this.handleInputChange} placeholder="Repeat password" />
+              <small className="form-text text-muted"> Must mach the password above</small>
+            </div>
+            {/* reapeat password input */}
+            <div className="form-group">
+              <label htmlFor="email">Email </label>
+              <input className="form-control" type="email" name="email" required value={email} onChange={this.handleInputChange} placeholder="Email" />
+              <small className="form-text text-muted">We will never share your email (It will be encrypted)</small>
             </div>
 
-             <div className=''>
-              <label htmlFor="displayName">Display Name:</label>
-              <input className='' type="text" name="displayName" required value={displayName} onChange={this.handleInputChange} />
-            </div>
-
-            <div className=''>
-              <label htmlFor="password">Password:</label>
-              <input className='' type="password" name="password" required value={password} onChange={this.handleInputChange} />
-            </div>
-
-            <div className=''>
-              <label htmlFor="passwordReap">Repeat Password:</label>
-              <input className='' type="password" name="passwordReap" required value={passwordReap} onChange={this.handleInputChange} />
-            </div>
-          
-            <div className=''>
-              <label htmlFor="email">Email :</label>
-              <input className='' type="email" name="email" required value={email} onChange={this.handleInputChange} />
-            </div>
-            
-
-            {/* to prevent spamm we disable the button while the request is fetching */}
-            <div className=''>
-            <Button disabled={isFetching}  children='Registrate' className=''/>
-            </div>
+            <Button disabled={isFetching}  children='Register' className='btn btn-primary button__submit_form'/>
           </form>
-        </div>
-      </div>
+        </Col>
+      </section>
     );
   }
 }

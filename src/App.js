@@ -32,18 +32,18 @@ class App extends Component {
             <Helmet defaultTitle='VeryWowChat' titleTemplate='VeryWow - %s '/>
             {/* The switch will decide what route to display */}
             <Switch location={this.props.location}>
-            
-              {/* if you try to go url/login the Login route will be displayed */}
-              <Route path='/login' exact component={Login} />
+
+              {/* if you try to go url/ the Login route will be displayed */}
+              <Route path='/' exact component={Login} />
               
               {/* UserRoute is smth that will check first if you are logged in i.e user and token exists in local storage
                   before giving you acces to the router, so you this style if you want to have ur user logged in 
                   so f.x we want to ensure our user is athenticated before he is given acces to Home route */}
-              <UserRoute path='/home' authenticated={this.props.isAuthenticated} component={Home} Redirection="/login" />
+              <UserRoute path='/home' authenticated={this.props.isAuthenticated} component={Home} Redirection="/" />
               
               {/* i dont want the user to be able to register a new account if he is still logged in that just looks bad
                   so if he tries to register a new account and he is still logged in he will be redirected to his home page */}
-              <UserRoute path='/register' authenticated={!this.props.isAuthenticated} component={Home} Redirection="/home" />
+              <UserRoute path='/register' authenticated={!this.props.isAuthenticated} component={Register} Redirection="/home" />
               
               {/* if nothing was matched then we return a notfound Route */}
               <Route component={NotFound} />

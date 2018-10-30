@@ -1,0 +1,43 @@
+.form-box {
+  padding: 10px;
+  background-color:#F5FAFA;
+  border-radius: 0.7em;
+  /* to alight the items on the x-axis */
+  float: none;
+  margin: 0 auto;
+}
+
+.vertical-center{
+  /* to alight the item on the y-axis */
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one   */
+  display: flex;
+  align-items: center;
+}
+
+.form_headder {
+  padding-bottom: 10px;
+  font-family: 'Simplifica';
+}
+
+/* the sexy loader icon */
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
