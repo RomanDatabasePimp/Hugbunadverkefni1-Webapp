@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { loginUser, logoutUser, resetAuthState  } from '../../actions/userActions';
 import Helmet from 'react-helmet';
-import Button from '../../components/button';
+
 
 class Login extends Component {
   
@@ -63,21 +63,7 @@ class Login extends Component {
 
     // ef hann er ekki skráður inn þá byrtum innskráningar form
     return (
-      <div className='form_wrapper col-sm-8 col-md-8 col-lg-10'>
-        <Helmet title='Login'></Helmet>
-        <h1>VeryWow Login </h1>
-        <form className='col-xs' onSubmit={this.handleSubmit}>
-          <div className='box'>
-            <label  htmlFor="username">User name:</label>
-            <input  className='' type="text" name="username" required value={username} onChange={this.handleInputChange} />
-          </div>
-          <div className='box'>
-            <label  htmlFor="password">Password:</label>
-            <input  className='' type="text" name="password" required value={password} onChange={this.handleInputChange} />
-          </div>
-          <Button disabled={loginIsFetching}  children='Login' className='box start-xs'/>
-        </form>
-      </div>
+    <div></div>
     );
   }
 }

@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "json-fetch": "^7.5.1",
+    "mdbreact": "^4.8.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react-bootstrap": "^0.32.4",
+    "react-dom": "^16.6.0",
     "react-helmet": "^5.2.0",
     "react-matches": "^0.2.1",
     "react-redux": "^5.0.7",

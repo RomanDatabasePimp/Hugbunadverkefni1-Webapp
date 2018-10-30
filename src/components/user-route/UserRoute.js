@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-export default ({component: Component, authenticated, ...rest}) => {
+export default ({component: Component,Redirection, authenticated, ...rest}) => {
   return (
     /* S.S þetta er middleware sem ath first hvort notandi er skráður inn eða ekki
       en notandin er ekki skráður inn þá er visað hann á /login istað 
@@ -10,7 +10,7 @@ export default ({component: Component, authenticated, ...rest}) => {
       {...rest}
       render={(props) => authenticated
         ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        : <Redirect to={{pathname:Redirection, state: {from: props.location}}} />}
     />
   )
 }
