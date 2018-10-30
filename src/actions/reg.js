@@ -11,6 +11,7 @@ function requestRegister() {
     type: REGISTER_REQUEST,
     isRegistrated: false,
     isFetching: true,
+    message:null,
   }
 }
 
@@ -49,14 +50,19 @@ export const registerUser = (data) => {
     dispatch(requestRegister());
     
     let register;
+    /* try to fetch the data from api */
     try {
       register = await datarequest('register', data, 'POST');
     } catch (e) {
         return dispatch(RegisterError(e));
     }
-
-    if (register.result.hasOwnProperty('errors')) {
-       return dispatch(RegisterError(register.result.errors));
+    
+    /* we know we get somekind of array and for the register we will always get 
+       an array with a size of 1 and it will contain a json obj errors with has many errors */
+    if (Array.isArray(register.result)) {
+      if(register.result[0].hasOwnProperty('errors')){
+        return dispatch(RegisterError(register.result[0].errors));
+      }
     }
 
     return dispatch(receivedRegister());

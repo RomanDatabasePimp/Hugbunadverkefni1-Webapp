@@ -1,0 +1,8 @@
+.error_list {
+    color: #F00;
+    list-style-type: none;
+    margin-left: 1rem;
+}
+.error_list li {
+    margin-bottom: 0.5rem;
+}

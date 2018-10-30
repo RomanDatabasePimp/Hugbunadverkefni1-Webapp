@@ -56,10 +56,8 @@ class Login extends Component {
     // if the data is beeing fetched we show a cool little spinnier to indicate the request is in proccsses
     if (loginIsFetching) {
       return (<section className="vertical-center">
-                <Col xs={10} md={5} sm={6} center="true" className="form-box ">
                   <Helmet title='Processing'></Helmet>
                   <div className="loader"></div>
-                </Col>
               </section>);
     }
     // if the user is authenticated then we redirect him to a new route

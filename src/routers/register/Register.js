@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { registerUser, registerStateReset } from '../../actions/reg';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import ErrorMessageList from '../../components/errorMessageList';
 import Button from '../../components/button';
 import Helmet from 'react-helmet';
 import {Col,Row} from 'react-bootstrap';
@@ -52,15 +52,13 @@ class Register extends Component {
     const { userName, displayName, password,passwordReap,email } = this.state; // we can work with the states
     const { isFetching, isRegistrated, message } = this.props; // get our props
     // if errors exist then we create a ErrorList out of them
-    console.log("message :"+message);
-    const errorsExist = message ?<p> {message}</p> : <p></p>;
+    const errorsExist = message ? <ErrorMessageList errors={message} /> : <p></p>;
+
     // if the data is beeing fetched we show a cool little spinnier to indicate the request is in proccsses
     if (isFetching) {
       return (<section className="vertical-center">
-                <Col xs={10} md={5} sm={6} center="true" className="form-box ">
                   <Helmet title='Processing'></Helmet>
                   <div className="loader"></div>
-                </Col>
               </section>);
     }
     /* if the register was successfull we show this insted */
@@ -69,7 +67,8 @@ class Register extends Component {
                   <Col xs={10} md={5} sm={6} center="true" className="form-box ">
                     <Helmet title='Registrated'></Helmet>
                     <h1> User created ! </h1>
-                    <p>Before you can login, you need to go to your email and open the validation link, <Link to='/login'>Login here</Link></p>  
+                    <p>Before you can login, you need to go to your email and open the validation link,
+                       then you can <Link to='/'>Login here</Link></p>  
                   </Col>
                 </section>);
     }

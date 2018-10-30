@@ -61,8 +61,6 @@ export async function datarequest(endpoint, data, method) {
   const options = {
     body: JSON.stringify(data), // data from body will be in json format
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:9090',
-      'Access-Control-Allow-Credentials': 'true',
       'content-type': 'application/json', // tell that we are sending json
     },
     method: method, // specify our method
@@ -75,8 +73,11 @@ export async function datarequest(endpoint, data, method) {
   } else {
     response = await fetch(url,options);
   }
+  // if status is 204 then we know there is no content
+  if(response.status === 204) { return { result: null, status: response.status }; }
   // same proccess as in noDataRequest
   let result = await response.json();
+  // spring boot catching server crashes etc...
   if(result.hasOwnProperty("message")){ return { result: null, status: response.status }; }
   // check whitch wrapper do we peel
   if(response.status >= 200 && response.status < 300 ) { result = result.GoodResp; }
