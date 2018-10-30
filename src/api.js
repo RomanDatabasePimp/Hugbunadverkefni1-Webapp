@@ -2,7 +2,7 @@ require('dotenv').config();
 
 /* fetched from the .evn file */
 const { 
-  APP_SERVICE_URL: baseurl  = 'http://localhost:9090/',// just incase if you forgget the env file
+  APP_SERVICE_URL: baseurl  = 'http://85.220.46.169:8443/',// just incase if you forgget the env file
 } = process.env;
 
 /* Usage : noDataRequest(endpoint, method)

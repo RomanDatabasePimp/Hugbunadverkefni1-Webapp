@@ -2,39 +2,42 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { loginUser, logoutUser, resetAuthState  } from '../../actions/userActions';
+
+import Button from '../../components/button';
 import Helmet from 'react-helmet';
+import {Col,Row} from 'react-bootstrap';
 
 
 class Login extends Component {
-  
+  /* Define our states */
   state = {
-    username: '', // nafn af notanda sem er að skrá sig inn
-    password: '', // lykillorð notanda sem er að skrá sig inn
+    username: '',
+    password: '',
   }
 
-  /* Ef notandi t.d reyndi logga inn og það failaði þá myndu villu meldingar byrtast
-    svo ef hann myndi fara á aðra siðu og til baka á login þá villu meldingar voru ennþá til staðar
-    þetta kemur i veg að villumeldingar myndu vera ennþá þarna */
+  /* always start on a clean sate, this prevents from loading some previous state maybe
+     where user failed a log in and maybe got some errors we dont want the user to load login
+     and be greeted with errors */
   async componentDidMount() {
     const { dispatch , isAuthenticated } = this.props;
-    // ef notandi er ekki skráður þá þarf að hreinsa store
+    // if the user is not logged in we need clean the session storage
     if (!isAuthenticated) { dispatch(resetAuthState()); }
   }
 
-  /* Notkun : this.handleInputChange
-     Fyrir  : e er input html element
-              sem hefur name sem username/password, value er strengur
-     Efitr  : Uppfærir stöðu username/password með value sem var gefið */
+  /* Usage  : this.handleInputChange
+       For  : e is an input html element
+              that has the name field of username/password
+     Efitr  : updates our state based of on inputs */
   handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name) { this.setState({ [name]: value }); }
   }
 
-  /* Notkun : this.handleSubmit
-     Fyrir  : ekkert
-     Eftir  : gerir action loginUser með notanda upplýsingum */
+  /* Usage  : this.handleSubmit
+       For  : ekkert
+     After  : performs an action to call login user */
   handleSubmit = async (e) => {
-    e.preventDefault(); // slökkva á default hegðun á formi
+    e.preventDefault(); // prevent basic bahavior
     const { dispatch } = this.props;
     const { username, password } = this.state;
     const data = {
@@ -46,25 +49,49 @@ class Login extends Component {
 
 
   render() {
-    // þurfum að sækja allar stoður
+    // fetch all the states needed for the render 
     const { username, password } = this.state;
-    /* þetta eru  indicators sem tákna hvað er að gerast i ferli
-       t.d ef loginIsFeatching er satt þá eru gögn ennþá i vinslu 
-              isAuthenticated þyðir að login tókst
-              loginErrorMsg þyðir að loggin mistókst eða eitthvað sem skilar villu hefur komið framm*/
     const { loginIsFetching, isAuthenticated, loginErrorMsg } = this.props;
-    // ef gögn eru i vinslu þá byrtum við the Doge loading
-    if (loginIsFetching) {
-      return (<div className='main_wrapper'><span>Skrái inn...</span><Helmet title='Skrái inn...'></Helmet></div>);
-    }
-    /* ef innskráning tókst þá er uppfært isAuthenticated þ.a við getum bara visað
-       notandan á /home og app.js mun sjá um rest */ 
-    if (isAuthenticated) { return (<Redirect to="/home" />); }
 
-    // ef hann er ekki skráður inn þá byrtum innskráningar form
+    // if the data is beeing fetched we show a cool little spinnier to indicate the request is in proccsses
+    if (loginIsFetching) {
+      return (<section className="vertical-center">
+                <Col xs={10} md={5} sm={6} center="true" className="form-box ">
+                  <Helmet title='Processing'></Helmet>
+                  <div className="loader"></div>
+                </Col>
+              </section>);
+    }
+    // if the user is authenticated then we redirect him to a new route
+    if (isAuthenticated) { return (<Redirect to="/home" />); }
+    
+    // and now comes the real pain in the ass
     return (
-    <div>hello</div>
+      <section className="vertical-center">
+        <Col xs={10} md={5} sm={6} center="true" className="form-box ">
+          <Helmet title='Login'></Helmet>
+          <h1 className="form_headder">Registration</h1>
+          {/*  {errorsExist} if Errors exists it will be printed above the registration form */}
+          <form onSubmit={this.handleSubmit}>
+
+            {/* Username input */}
+            <div className="form-group">
+              <label htmlFor="username">Username </label>
+              <input className="form-control" type="text" name="username" required value={username} onChange={this.handleInputChange} placeholder="Username" />
+            </div>
+
+            {/* password input */}
+            <div className="form-group">
+              <label htmlFor="password">Password </label>
+              <input className="form-control" type="password" name="password" required value={password} onChange={this.handleInputChange} placeholder="Password" />
+            </div>
+
+            <Button disabled={loginIsFetching}  children='Login' className='btn btn-primary button__submit_form'/>
+          </form>
+        </Col>
+      </section>
     );
+
   }
 }
 

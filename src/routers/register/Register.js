@@ -40,7 +40,7 @@ class Register extends Component {
      For   : ekkert
     After  : call the action registerUser and pass it the data */
   handleSubmit = async (e) => {
-    e.preventDefault(); // slökkva á default hegðun á formi
+    e.preventDefault(); // prevent basic bahavior
     const { dispatch } = this.props;
     const { userName, displayName, password,passwordReap,email } = this.state;
     const data = {userName,displayName,password,passwordReap,email};
@@ -69,7 +69,7 @@ class Register extends Component {
                   <Col xs={10} md={5} sm={6} center="true" className="form-box ">
                     <Helmet title='Registrated'></Helmet>
                     <h1> User created ! </h1>
-                    <p>Before you can login, you need to go to your email and open the validation link</p>  
+                    <p>Before you can login, you need to go to your email and open the validation link, <Link to='/login'>Login here</Link></p>  
                   </Col>
                 </section>);
     }
