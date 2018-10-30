@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import ErrorMessageList from '../../components/errorMessageList';
 import Button from '../../components/button';
 import Helmet from 'react-helmet';
-import {Col,Row} from 'react-bootstrap';
+import {Col} from 'react-bootstrap';
 
 class Register extends Component {
 
@@ -111,8 +111,9 @@ class Register extends Component {
               <input className="form-control" type="email" name="email" required value={email} onChange={this.handleInputChange} placeholder="Email" />
               <small className="form-text text-muted">We will never share your email (It will be encrypted)</small>
             </div>
-
+         
             <Button disabled={isFetching}  children='Register' className='btn btn-primary button__submit_form'/>
+            <small className="form-text text-muted"> Already have account ? <Link to='/'>Login here</Link> </small>
           </form>
         </Col>
       </section>

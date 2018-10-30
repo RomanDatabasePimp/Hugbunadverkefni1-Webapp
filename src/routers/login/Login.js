@@ -5,7 +5,7 @@ import { loginUser, logoutUser, resetAuthState  } from '../../actions/userAction
 
 import Button from '../../components/button';
 import Helmet from 'react-helmet';
-import {Col,Row} from 'react-bootstrap';
+import {Col} from 'react-bootstrap';
 
 
 class Login extends Component {
@@ -68,7 +68,7 @@ class Login extends Component {
       <section className="vertical-center">
         <Col xs={10} md={5} sm={6} center="true" className="form-box ">
           <Helmet title='Login'></Helmet>
-          <h1 className="form_headder">Registration</h1>
+          <h1 className="form_headder">Login</h1>
           {/*  {errorsExist} if Errors exists it will be printed above the registration form */}
           <form onSubmit={this.handleSubmit}>
 
@@ -85,6 +85,7 @@ class Login extends Component {
             </div>
 
             <Button disabled={loginIsFetching}  children='Login' className='btn btn-primary button__submit_form'/>
+            <small className="form-text text-muted"> Dont have account ? <Link to='/register'>Sign up here</Link> </small>
           </form>
         </Col>
       </section>

@@ -12,7 +12,7 @@ import UserRoute from './components/user-route';
 import Home from './routers/home';
 import Login from './routers/login';
 import Register from './routers/register';
-
+import AccValidation from './routers/AccountValidation';
 import {Grid,Row} from 'react-bootstrap';
 import './App.css';
 
@@ -35,6 +35,9 @@ class App extends Component {
 
               {/* if you try to go url/ the Login route will be displayed */}
               <Route path='/' exact component={Login} />
+              
+              {/* This is For validation from emailLink */}
+              <Route path='/validation/:key' exact component={AccValidation} />
               
               {/* UserRoute is smth that will check first if you are logged in i.e user and token exists in local storage
                   before giving you acces to the router, so you this style if you want to have ur user logged in 
