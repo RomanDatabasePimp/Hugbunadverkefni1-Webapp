@@ -2,7 +2,7 @@ require('dotenv').config();
 
 /* fetched from the .evn file */
 const { 
-  APP_SERVICE_URL: baseurl  = 'http://85.220.46.169:8443/',// just incase if you forgget the env file
+  APP_SERVICE_URL: baseurl  = 'http://localhost:9090/',// just incase if you forgget the env file
 } = process.env;
 
 /* Usage : noDataRequest(endpoint, method)
@@ -61,6 +61,8 @@ export async function datarequest(endpoint, data, method) {
   const options = {
     body: JSON.stringify(data), // data from body will be in json format
     headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:9090',
+      'Access-Control-Allow-Credentials': 'true',
       'content-type': 'application/json', // tell that we are sending json
     },
     method: method, // specify our method
