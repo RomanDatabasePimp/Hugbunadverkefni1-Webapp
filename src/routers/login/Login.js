@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import { loginUser, logoutUser, resetAuthState  } from '../../actions/userActions';
-
+import { loginUser, resetAuthState  } from '../../actions/userActions';
+import ErrorMessageList from '../../components/errorMessageList';
 import Button from '../../components/button';
 import Helmet from 'react-helmet';
 import {Col} from 'react-bootstrap';
@@ -11,7 +11,7 @@ import {Col} from 'react-bootstrap';
 class Login extends Component {
   /* Define our states */
   state = {
-    username: '',
+    userName: '',
     password: '',
   }
 
@@ -39,9 +39,9 @@ class Login extends Component {
   handleSubmit = async (e) => {
     e.preventDefault(); // prevent basic bahavior
     const { dispatch } = this.props;
-    const { username, password } = this.state;
+    const { userName, password } = this.state;
     const data = {
-      username,
+      userName,
       password,
     };
     dispatch(loginUser(data));
@@ -50,8 +50,9 @@ class Login extends Component {
 
   render() {
     // fetch all the states needed for the render 
-    const { username, password } = this.state;
+    const { userName, password } = this.state;
     const { loginIsFetching, isAuthenticated, loginErrorMsg } = this.props;
+    const errorsExist = loginErrorMsg ? <ErrorMessageList errors={loginErrorMsg} /> : <p></p>;
 
     // if the data is beeing fetched we show a cool little spinnier to indicate the request is in proccsses
     if (loginIsFetching) {
@@ -61,7 +62,7 @@ class Login extends Component {
               </section>);
     }
     // if the user is authenticated then we redirect him to a new route
-    if (isAuthenticated) { return (<Redirect to="/home" />); }
+    if (isAuthenticated) { return (<Redirect to="/" />); }
     
     // and now comes the real pain in the ass
     return (
@@ -69,13 +70,13 @@ class Login extends Component {
         <Col xs={10} md={5} sm={6} center="true" className="form-box ">
           <Helmet title='Login'></Helmet>
           <h1 className="form_headder">Login</h1>
-          {/*  {errorsExist} if Errors exists it will be printed above the registration form */}
+          {errorsExist} {/* if Errors exists it will be printed above the registration form */}
           <form onSubmit={this.handleSubmit}>
 
             {/* Username input */}
             <div className="form-group">
-              <label htmlFor="username">Username </label>
-              <input className="form-control" type="text" name="username" required value={username} onChange={this.handleInputChange} placeholder="Username" />
+              <label htmlFor="userName">Username </label>
+              <input className="form-control" type="text" name="userName" required value={userName} onChange={this.handleInputChange} placeholder="Username" />
             </div>
 
             {/* password input */}

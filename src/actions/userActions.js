@@ -1,12 +1,16 @@
-/* sótt HTTP request föll úr API er reynt 
-  að nota eins fá föll og hægt er  næ að sleppa með 3 */
-import { nodatarequest, datarequest, formdatarequest } from '../api';
+/* !!!!!!!!!!!!!!!!!!!!!!!!!! NOTE BEFORE READIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   There is allot of unsued implementations here that we dont fully know if we have 
+   time to implement them server side but it was rly simple just do add support on the
+   webApp end that i just did it so not all is used here but its ready when it will be
+   implemented server-side */
 
-/* til að gera þetta einfaldara og aðskilgreina virkni frá componentum 
-  við gerum þetta þannig að ef notanda token er invalid þá munu thunks
-  sjá um riderect i actions. þetta er mjög clean leið til að gera þetta utaf núna
-  öll önnur actions geta kallað fall heðan sem mun sjá um að
-  hreinsa notanda og rederecta á /login  */
+
+
+import { datarequest } from '../api';
+
+/* This is a small trcik i use, i want to have the power of riderection in actions
+   this is the way i found that works, i dont know if its good but it works
+   will be used for when register is succesful or when JTW token is provent to be invalid   */
 import history from '../history';
 
 /* A action is Split into twö parts
@@ -230,49 +234,47 @@ function logout() {
 /* Thunk leyfir okkur að skila falli en ekki bara hlut sem er 
    mjög þægilegt að taka i burt meira virkni frá Componentum */
 
-/* Notkun : dispach(logoutUser())
-    Fyrir : ekkert
-    Eftir : hreinsar user, token i local storage og riderectar hann á login */
+/* Usage  : dispach(logoutUser())
+    For   : nothing
+    After : removes the user from local storage and riderects the client to / */
 export const logoutUser = () => {
   return async (dispatch) => {
     window.localStorage.removeItem('user');
-    window.localStorage.removeItem('token');
-    history.push('/login');
+    history.push('/');
     return dispatch(logout());
   }
 }
 
-/* Notkun : dispach(resetAuthState())
-    Fyrir : ekkert
-    Eftir : upphafsStillir allar stoður i atuh i upphafsgildin þeirra */
+/* Usage  : dispach(resetAuthState())
+    For   : Nothing
+    After : resets the state to default */
 export const resetAuthState = () => {
   return async (dispatch) => {
     return dispatch(logginReset());
   }
 }    
 
-/* Notkun : dispach(loginUser(data))
-   Fyrir  : data er json obj með properties username,password
-   Eftir  : Gerir first post á login og ef það kemur upp villa þá
-            er sent villa til notandans annars þá er fengið token og notanda
-            og vistað þau i localstorage  */
+/* Usage  : dispach(loginUser(data))
+   For    : data is a json obj with userName,password keys
+   After  : Send a POST request on the Spring app and if the request was
+            succseful we will store   */
 export const loginUser = (data) => {
   return async (dispatch) => {
     dispatch(requestLogin());
-    // reynt er að senda beðni á heroku
     let login;
     try {
       login = await datarequest('login', data, 'POST');
     } catch (e) {
       return dispatch(loginError(e));
     }
-    // ef status kóði er yfir 400 þá er það villa
-    if (login.status >= 400) {
-      // þá er til json obj með property error sem hægt er að byrta
-      return dispatch(loginError(login.result.error));
+    
+    if(Array.isArray(login.result)) {
+      if(login.result[0].hasOwnProperty('errors')){
+        return dispatch(loginError(login.result[0].errors));
+      }
     }
-    window.localStorage.setItem('token', login.result.token);
-    window.localStorage.setItem('user', JSON.stringify(login.result.user));    
-    return dispatch(receiveLogin(login.result.user));
+    
+    window.localStorage.setItem('user', JSON.stringify(login.result[0]));    
+    return dispatch(receiveLogin(login.result[0]));
   }
 }            

@@ -12,7 +12,8 @@ const {
             and returns the json obj with the status code */
 export async function noDataRequest(endpoint, method) {
   // If the token exists we will send it along
-  const token = window.localStorage.getItem('token');
+  const user = window.localStorage.getItem('user');
+  
   // concat our wanted url
   const url = `${baseurl}${endpoint}`;
   // options for the http request
@@ -24,8 +25,9 @@ export async function noDataRequest(endpoint, method) {
   /* if we have the JWT we send it along sometimes u dont want and sometimes
      you need so insted of making two different functions its better just send
      the token along for the ride */
-  if (token) {
-    options.headers['Authorization'] = `Bearer ${token}`;
+  if (user) {
+    const token = JSON.parse(user).token;
+    options.headers['Authorization'] = `Token ${token}`;
     response = await fetch(url, options);
   } else {
     response = await fetch(url);
@@ -54,7 +56,7 @@ export async function noDataRequest(endpoint, method) {
             json obj with a status code */
 export async function datarequest(endpoint, data, method) {
   // Again same thing with the token if it exists we take it with us
-  const token = window.localStorage.getItem('token');
+  const user = window.localStorage.getItem('user');
   // create the url
   const url = `${baseurl}${endpoint}`;
   // set our options
@@ -67,8 +69,9 @@ export async function datarequest(endpoint, data, method) {
   };
   let response = null;
   /* again same stuff with the token */
-  if (token) {
-    options.headers['Authorization'] = `Bearer ${token}`;
+  if (user) {
+    const token = JSON.parse(user).token;
+    options.headers['Authorization'] = `Token ${token}`;
     response = await fetch(url, options);
   } else {
     response = await fetch(url,options);

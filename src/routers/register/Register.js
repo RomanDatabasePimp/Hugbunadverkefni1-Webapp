@@ -68,7 +68,7 @@ class Register extends Component {
                     <Helmet title='Registrated'></Helmet>
                     <h1> User created ! </h1>
                     <p>Before you can login, you need to go to your email and open the validation link,
-                       then you can <Link to='/'>Login here</Link></p>  
+                       then you can <Link to='/login'>Login here</Link></p>  
                   </Col>
                 </section>);
     }

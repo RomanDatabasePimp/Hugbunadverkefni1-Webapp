@@ -28,7 +28,7 @@ class AccValidation extends Component {
     }
     // our response
     let response = <p></p>;
-    if(!validationSuccess) {
+    if(validationSuccess) {
       response = <div><h1>Congratulations!</h1><div> you have been validated, you can log in here <Link to='/'>Login here</Link></div></div>;
     }
 
