@@ -54,7 +54,6 @@ export const validateUser = (data) => {
     } catch (e) {
         return dispatch(ValidateError(e));
     }
-    console.log(validation.result);
     /* we know we get somekind of array and for the register we will always get 
              an array with a size of 1 and it will contain a json obj errors with has many errors */
     if (Array.isArray(validation.result)) {

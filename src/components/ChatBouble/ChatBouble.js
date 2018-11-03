@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './ErrorMessageList.css';
-
-export default class ErrorMessageList extends Component {
+export default class ChatBouble extends Component {
 
   static propTypes = {
-    errors: PropTypes.array,
+    chatname: PropTypes.string,
+    
   }
 
   static defaultProps = {
