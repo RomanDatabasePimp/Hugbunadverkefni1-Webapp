@@ -29,7 +29,6 @@ export async function noDataRequest(endpoint, method) {
   if (user) {
     const token = JSON.parse(user).token;
     options.headers['Authorization'] = token;
-    console.log(options);
     response = await fetch(url, options);
   } else {
     response = await fetch(url);
@@ -74,7 +73,6 @@ export async function datarequest(endpoint, data, method) {
   if (user) {
     const token = JSON.parse(user).token;
     options.headers['Authorization'] = token;
-    console.log(options);
     response = await fetch(url, options);
   } else {
     response = await fetch(url,options);
