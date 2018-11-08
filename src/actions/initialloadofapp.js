@@ -94,7 +94,7 @@ export const getUserData = () => {
     let request;
     /* try to fetch the data from api */
     try {
-      request = await noDataRequest('user/getallrelations', 'GET');
+      request = await noDataRequest('auth/user/getallrelations', 'GET');
     } catch (e) {
       return dispatch(userInformationError(e));
     }

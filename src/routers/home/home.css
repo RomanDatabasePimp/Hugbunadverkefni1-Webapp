@@ -1,5 +1,15 @@
 /* The chat templete was fetched from https://bootsnipp.com/snippets/exR5v 
    and then altered by me to fit our needs */
+.logOutButton {
+  padding-top: 0.2em;
+  padding-left: 0.3em;
+  color:red;
+  font-weight: 700;
+}
+
+.blacktext{
+  color: black;
+}
 
 #frame {
   min-width: 340px;
@@ -477,18 +487,8 @@
     margin-right: 3px;
     font-size: 1em;
   }
-  @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button i {
-      font-size: 1.3em;
-    }
-  }
-  @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button span {
-      display: none;
-    }
-  }
+ 
   #frame .content {
-    float: right;
     width: 60%;
     height: 100%;
     overflow: hidden;
@@ -621,31 +621,14 @@
   #frame .content .message-input .wrap input:focus {
     outline: none;
   }
-  #frame .content .message-input .wrap .attachment {
-    position: absolute;
-    right: 60px;
-    z-index: 4;
-    margin-top: 10px;
-    font-size: 1.1em;
-    color: #435f7a;
-    opacity: .5;
-    cursor: pointer;
-  }
-  @media screen and (max-width: 735px) {
-    #frame .content .message-input .wrap .attachment {
-      margin-top: 17px;
-      right: 65px;
-    }
-  }
-  #frame .content .message-input .wrap .attachment:hover {
-    opacity: 1;
-  }
+
   #frame .content .message-input .wrap button {
-    float: right;
+   
     border: none;
-    width: 50px;
-    padding: 12px 0;
+    width: 85px;
+    padding: 10px 0;
     cursor: pointer;
+    border-radius: 0;
     background: #32465a;
     color: #f5f5f5;
   }

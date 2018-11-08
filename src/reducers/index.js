@@ -12,6 +12,6 @@ export default combineReducers({
   reg,
   userActions,
   registerValidation,
-  initialloadofapp
-  //opennewchat
+  initialloadofapp,
+  opennewchat
 });
