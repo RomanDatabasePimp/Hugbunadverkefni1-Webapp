@@ -1,4 +1,4 @@
-import { OPEN_CHAT } from '../actions/opennewchat';
+import { OPEN_CHAT, OPEN_REQUEST } from '../actions/opennewchat';
 
 const initialState = {
   chatid: null,
@@ -10,8 +10,14 @@ export default (state = initialState, action) => {
     case OPEN_CHAT:
       return {
         ...state,
-        chatid: action.isFetching,
-        chatname: action.isRegistrated,
+        chatid: action.chatid,
+        chatname: action.chatname,
+      };
+    case OPEN_REQUEST:
+      return {
+        ...state,
+        chatid: action.chatid,
+        chatname: action.chatname,
       };
     default:
       return state;

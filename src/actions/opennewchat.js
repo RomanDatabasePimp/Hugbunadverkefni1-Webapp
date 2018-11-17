@@ -1,4 +1,5 @@
 export const OPEN_CHAT = 'OPEN_CHAT';
+export const OPEN_REQUEST = 'OPEN_REQUEST';
 
 function openChat(id,name) {
   return {
@@ -8,4 +9,18 @@ function openChat(id,name) {
   }
 }
 
-export const openNewChat = (id,name) => { return async (dispatch) => {  return dispatch(openChat(id,name)); } }
+function openChatRequest() {
+  return {
+    type: OPEN_REQUEST,
+    chatid: null,
+    chatname: null
+  }
+}
+
+export const openNewChat = (id,name) => { 
+  return async (dispatch) => {
+    dispatch(openChatRequest())
+
+    return dispatch(openChat(id,name));
+  }
+}

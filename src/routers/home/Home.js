@@ -12,16 +12,14 @@ class Home extends Component {
 
   render() {
     const { chatid, chatname } = this.props;
-    
-    const chatopen = !chatid ? <ChatMessageContainer chatid={chatid} chatname={chatname}></ChatMessageContainer> : <span></span>;
-    // Here comes the component initiation hell !!!
+    // check if we have to open a new chat
+    const chatopen = chatid ? <ChatMessageContainer chatid={chatid} chatname={chatname}></ChatMessageContainer> : <span></span>;
+  
     return (
       <main id="frame">
         {/* create the left sidepanel */}
         <Sidepanel></Sidepanel>
-
         {chatopen}
-        
       </main>
     );
   }

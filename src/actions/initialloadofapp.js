@@ -33,13 +33,13 @@ function receivedUserInformation(chatroomAdminInvites,friendRequestees,chatroomI
     isFetching: false,
     
     errorMsg:null,
-    chatroomAdminInvites,
-    friendRequestees,
-    chatroomInvites,
-    chatroomRequests,
-    chatrooms,
-    friends,
-    friendRequestors
+    chatroomAdminInvites:chatroomAdminInvites,
+    friendRequestees:friendRequestees,
+    chatroomInvites:chatroomInvites,
+    chatroomRequests:chatroomRequests,
+    chatrooms:chatrooms,
+    friends:friends,
+    friendRequestors:friendRequestors
   }
 }
   
@@ -102,14 +102,13 @@ export const getUserData = () => {
     if(request.result.hasOwnProperty('error')){
       return dispatch(userInformationError(request.result.error));
     }
-     
-    return dispatch(receivedUserInformation(request.result.chatroomAdminInvites,
-                                     request.result.friendRequestees,
-                                     request.result.chatroomInvites,
-                                     request.result.chatroomRequests,
-                                     request.result.chatrooms,
-                                     request.result.friends,
-                                     request.result.friendRequestors,
+    return dispatch(receivedUserInformation(request.result.relations.chatroomAdminInvites,
+                                     request.result.relations.friendRequestees,
+                                     request.result.relations.chatroomInvites,
+                                     request.result.relations.chatroomRequests,
+                                     request.result.relations.chatrooms,
+                                     request.result.relations.friends,
+                                     request.result.relations.friendRequestors,
                                      ));
   }
 }
