@@ -6,6 +6,7 @@ import {Modal} from 'react-bootstrap';
 import { logoutUser  } from '../../actions/userActions';
 import { getUserData } from '../../actions/initialloadofapp';
 import Friendrequests from '../Friendrequests';
+import ChatBouble from '../ChatBouble';
 
 class Sidepanel extends Component {
 
@@ -31,14 +32,16 @@ class Sidepanel extends Component {
      After : filters the chat array from props to the requested input */
   searchMyChats = (e) => {
     const { chatrooms } = this.props;
-    const { searchchat } = e.target;
-    // if the input is empty then we return 
-    if(searchchat) { this.setState({ isSearching:false }); return;  }
+    const { searchchats } = e.target;
+    
+    // if the input is empty then we return
+    if(!searchchats) { this.setState({ isSearching:false }); return;  }
+
       const filteredchat = [];
       for(let chatroom in chatrooms ) {
-        if(chatrooms[chatroom].displayName.toLowerCase().match(searchchat.toLowerCase())){
-          filteredchat.push(chatrooms[chatroom]);
-        }
+        let chatname = chatrooms[chatroom].displayName.toLowerCase();
+        /** TO DO */
+       
       }
     this.setState({ isSearching:true,filteredChat:filteredchat });
   }
@@ -60,17 +63,28 @@ class Sidepanel extends Component {
     
     if(isFetching) {
         return (<Helmet title={`Loading`} ></Helmet>);
-    }
-   
-    /* Since errors should NEVER happen on this route we clear the session storage 
+    } 
+     /* Since errors should NEVER happen on this route we clear the session storage 
          and riderect the user to login wich is a safe state */ 
     if(errorMsg) {
       console.log(errorMsg," Beeing redirected to /login");// print error for debug popuses
       dispatch(logoutUser()); // call the logout
     }
-
+  
     //if the user decided to filter his chats then we use those insted
     const myChats = isSearching? filteredChat : chatrooms;
+
+    // we create the chat boubles now if the chats exist
+    const chatboubles = myChats ?  Object.keys(myChats).map(function (key) {
+      return(
+        <li className="contact" key={key}>
+          <ChatBouble chatroomName={myChats[key].chatroomName}
+            displayName={myChats[key].displayName}
+            lastMessageReceived={myChats[key].lastMessageReceived}
+            lastRead={myChats[key].lastRead}></ChatBouble>
+        </li>
+      )}): <p></p>;
+
     // if u try having letters other than a-z then you get dodge
     const myImg = displayname.substr(0,1).toLowerCase().match("^[a-z]+$")? displayname.substr(0,1).toLowerCase() :'wow';
 
@@ -86,7 +100,7 @@ class Sidepanel extends Component {
           <div id="profile">
             <div className="wrap" onClick={() => this.setState({ showUserPop: true })}>
               {/* get the image with the first name  */}
-              <img id="profile-img" src={`/img/${myImg}.png`} alt="" className="online" />
+              <img id="profile-img" src={`/img/${myImg}.png`} alt="very wow logo" className="online" />
               <p>{displayname}</p>
             </div>
           </div>
@@ -113,13 +127,13 @@ class Sidepanel extends Component {
 
         {/* The search bar for sorting chats  */}
         <div id="search">
-          <input name="searchchat" type="text" placeholder="Search Chats..." onChange={this.searchMyChats}/>
+          <input name="searchchats" type="text" placeholder="Search Chats..." onChange={this.searchMyChats}/>
         </div>
 
         {/* All the chat rooms the user belongs to */}
         <div  iv id="contacts">
           <ul>
-      
+            {chatboubles}
           </ul>
         </div>
         
