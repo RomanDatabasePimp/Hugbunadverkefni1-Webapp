@@ -4,7 +4,6 @@ import reg from './reg'
 import registerValidation from './registerValidation'
 import initialloadofapp from './initialloadofapp'
 import opennewchat from './opennewchat'
-import chatBoublePolling from './chatBoublePolling'
 
 /* Utaf store er eitt stór js object
   við tengjum alla reducera okkar saman 
@@ -14,6 +13,5 @@ export default combineReducers({
   userActions,
   registerValidation,
   initialloadofapp,
-  opennewchat,
-  chatBoublePolling
+  opennewchat
 });

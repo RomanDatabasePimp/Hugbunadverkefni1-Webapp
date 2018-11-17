@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { pollChat  } from '../../actions/chatBoublePolling';
 import { openNewChat } from '../../actions/opennewchat';
 import { logoutUser  } from '../../actions/userActions';
+import { noDataRequest } from '../../api';
+import { EROFS } from 'constants';
 
 class ChatBouble extends Component {
   /* This will be a pretty sexy chat bouble it will have to poll the data
@@ -25,7 +26,8 @@ class ChatBouble extends Component {
 
   state = {
     timer : null,
-    lastReadState : null,
+    newTimeStamp : null,
+    error: null
   }
 
   componentDidMount() {
@@ -34,12 +36,25 @@ class ChatBouble extends Component {
   componentWillUnmount() {
     this.setState({timer:null});
   }
-
-  updateChat() {
-    const { dispatch,chatroomName } = this.props;
-    dispatch(pollChat(chatroomName));
+  
+  /* THere is a small problem we cant make actions for these compoments since
+     if we would they would all overwrite the store and all components would badicly
+     have what ever was stored last, and in the process they will be rewriting the shit
+     out of each other */
+  async updateChat() {
+    const {chatroomName} = this.props;
+    const res = await noDataRequest(`auth/chatroom/${chatroomName}`,"GET");
+    // if error we update the state
+    if(res.result.hasOwnProperty("error")) {
+      this.setState({error : res.result.error});
+      return;
+    }
+    this.setState({newTimeStamp : res.result.lastMessageReceived, error:null});
   }
 
+  /* This is a example of when we want them to overwrite the store state since only 
+     one chat window can be opened at a time, the component that overwrited the store last
+     will display its chat */
   openNewChat() {
     const { dispatch,chatroomName,displayName,lastMessageReceived } = this.props;
     this.state.lastReadState = lastMessageReceived;
@@ -52,23 +67,23 @@ class ChatBouble extends Component {
   }
 
 render() {
-    const {displayName,lastRead,lastMessageReceived,chatPollRoom,chatPollErr} = this.props;
-    const {lastReadState} = this.state;
+    const {displayName,lastRead,lastMessageReceived} = this.props;
+    const {newTimeStamp,error} = this.state;
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
     let chatNewMsg;
-    if(chatPollErr) { this.callLogout(); }
-   
-    if(chatPollRoom && chatPollRoom.lastMessageReceived) {
-      
-      chatNewMsg  = lastRead > chatPollRoom.lastMessageReceived? "online" : "offiline";
+    /* There are 3 possible erros for this class
+       1: 500 error -> log out user just to go to a safe state
+       2: JTW token invalid -> have to logout the user since his token is invalid
+       3: chat dosent exist ? but it existed on the initial load ? (spooky error)
+          so to be safe we just log out the user to be in a safe state */
+    if(error) { console.log(error); this.callLogout(); }
+    if(newTimeStamp) {
+      chatNewMsg = lastRead < newTimeStamp ? "online" : "offline";
     } else {
-      if(lastReadState) {
-        chatNewMsg  = lastRead > lastReadState? "online" : "offiline";
-      } else {
-        chatNewMsg  = lastRead > lastMessageReceived? "online" : "offiline";
-      }
+      chatNewMsg = lastRead < lastMessageReceived ? "online" : "offline";
     }
+
 
     return (
       <div className="wrap"  onClick={this.openNewChat.bind(this)}>
@@ -84,8 +99,6 @@ render() {
 
 const mapStateToProps = (state) => {
   return {
-    chatPollErr : state.chatBoublePolling.msg,
-    chatPollRoom : state.chatBoublePolling.chatroom
   }
 }
 export default connect(mapStateToProps)(ChatBouble);
