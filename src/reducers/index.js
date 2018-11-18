@@ -5,6 +5,7 @@ import registerValidation from './registerValidation'
 import initialloadofapp from './initialloadofapp'
 import opennewchat from './opennewchat'
 import chatroom from './chatroom'
+import addAcceptAction from './addAcceptAction'
 
 /* Utaf store er eitt stór js object
   við tengjum alla reducera okkar saman 
@@ -15,5 +16,6 @@ export default combineReducers({
   registerValidation,
   initialloadofapp,
   opennewchat,
-  chatroom
+  chatroom,
+  addAcceptAction
 });

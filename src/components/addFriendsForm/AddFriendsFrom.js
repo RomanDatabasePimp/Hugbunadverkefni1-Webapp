@@ -1,0 +1,77 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import {Modal} from 'react-bootstrap';
+import { logoutUser  } from '../../actions/userActions';
+import { getUserData } from '../../actions/initialloadofapp';
+import { addOrAcceptUser, addOrAccepReset} from '../../actions/addAcceptAction';
+
+class AddFriendsFrom extends Component {
+
+  state = {
+    newUser : "" /* hold the user name that the client wants to add */
+  }
+
+  /* Since we use Store we need to make sure that the sore is always
+     whiped before we use it to ensure the intended functuonallity */
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(addOrAccepReset);
+  }
+
+  /* Usage  : handleInputChange(e)
+       For  : e is an input html element
+              that has the name field of newUser
+     Efitr  : updates our state based of on inputs */
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name) { this.setState({ [name]: value }); }
+  }
+
+  /* Usage : handleSubmit(e)
+      For  : e is a form element
+     After : prevents the default behaviour of the form and calls the
+             Action to try to add friends */
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    const { newUser } = this.state;
+    dispatch(addOrAcceptUser(newUser));
+  }
+
+  render() {
+    const { newUser } = this.state;
+    const { isFetching, error, addAccepted } = this.props;
+
+    const err = error ? <p className="error">{error}</p> : <span></span>;
+    const succ = addAccepted ? <p>{`A friend request has been sent to ${newUser}`}</p> : <span></span>
+    if(isFetching) {
+      return (<div className="loader"></div>)
+    }
+
+    return (
+      <form className="modal_form" onSubmit={this.handleSubmit}>
+          {succ}
+          {err}
+          <label>New friends username 
+            <input className="form-control" type="text" value={newUser} name="newUser" required placeholder="Friends username" onChange={this.handleInputChange} autofocus/>
+          </label>
+      </form>
+    )
+  }
+}
+
+/* Takes the state and sends it as props
+  þá er hægt að nota this.props.isAdding og þá það virkar
+  auth er reducer sem er sameinaður i index.js */
+const mapStateToProps = (state) => {
+  return {
+    isFetching: state.addAcceptAction.isFetching,
+    error: state.addAcceptAction.error,
+    addAccepted: state.addAcceptAction.addAccepted
+  }
+}
+
+/* make this component aware of the aplication store 
+  þetta er ekki lengur component heldur Container */
+export default connect(mapStateToProps)(AddFriendsFrom);

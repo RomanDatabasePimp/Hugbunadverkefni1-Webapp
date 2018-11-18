@@ -8,6 +8,7 @@ import { getUserData } from '../../actions/initialloadofapp';
 import Friendrequests from '../Friendrequests';
 import ChatBouble from '../ChatBouble';
 import ChatroomForm from '../ChatroomForm';
+import AddFriendsFrom from '../addFriendsForm';
 
 class Sidepanel extends Component {
 
@@ -17,7 +18,8 @@ class Sidepanel extends Component {
     isSearching:false, // if the user is using the searcg filter option
     showUserPop:false,// indicates if we should show popup for the user info
     filteredChat:[], // the filtered chat
-    chatroomManagerOpen:false // if the chatroomManager is open
+    chatroomManagerOpen:false, // if the chatroomManager is open
+    friendsButtonOpen:false
   }
 
   async componentDidMount() {
@@ -142,10 +144,25 @@ class Sidepanel extends Component {
         
         {/* bottom bar  */}
           <div id="bottom-bar">
-            <button ><span>Add Friends</span></button>
+            <button onClick={() => {this.setState({friendsButtonOpen: true})}} ><span>Add Friends</span></button>
             <button onClick={() => {this.setState({chatroomManagerOpen: true})}}><span>Create Chat</span></button>
           </div>
-          
+          <Modal
+            show={this.state.friendsButtonOpen}
+            onHide={ () => this.setState({ friendsButtonOpen: false }) }
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title" className="blacktext">
+                  Ugh you lonely soul, go ahead add some friends
+                </Modal.Title>
+              </Modal.Header>
+            <Modal.Body className="blacktext">
+               <AddFriendsFrom></AddFriendsFrom>
+            </Modal.Body>
+          </Modal>
+
           <Modal
             show={this.state.chatroomManagerOpen}
             onHide={ () => this.setState({ chatroomManagerOpen: false }) }
