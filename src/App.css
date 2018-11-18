@@ -1,3 +1,15 @@
+.modal_form label{
+  width: 75%;
+}
+
+.modal_form{
+  margin-bottom: 3em;
+}
+
+#bottom-bar{
+  margin-bottom: 1em;
+}
+
 .form-box {
   padding: 10px;
   background-color:#F5FAFA;
