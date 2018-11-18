@@ -55,7 +55,7 @@ class AddFriendsFrom extends Component {
           {err}
           <div className="form-group" >
             <label >New friends username 
-              <input className="form-control" type="text" value={newUser} name="newUser" required placeholder="Friends username" onChange={this.handleInputChange} autofocus/>
+              <input className="form-control" type="text" value={newUser} name="newUser" required placeholder="Friends username" onChange={this.handleInputChange} autoFocus/>
             </label>
           </div>
       </form>

@@ -32,6 +32,14 @@ class Sidepanel extends Component {
     dispatch(getUserData());
   }
   
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.actionSuccess !== this.props.actionSuccess){
+      // since a new chat is open we need to make sure
+      // that a new pulling starts correcly
+      const { dispatch } = this.props;
+      dispatch(getUserData());
+    }
+  } 
   /* Usage : searchMyChats(e)
       For  : e is a input element that has name searchchat
      After : filters the chat array from props to the requested input */
@@ -64,12 +72,23 @@ class Sidepanel extends Component {
     dispatch(logoutUser());
   }
 
+  /* Usage : checkIfChatReoomCreated()
+      For  : nothing
+     After : checks if a new chatroom has been created
+             if it has then its added to the chatrooms so the user can see them */
+  checkIfChatReoomCreated(){
+    const { chatroom,dispatch } = this.props;
+    if(chatroom){
+      dispatch(getUserData());
+    }
+  }
+
   render() {
     // get the state
     const { username,displayname,isSearching,filteredChat,showUserPop,searchchats} = this.state;
     // get all the props we can also use this = friendRequestees,chatroomRequests,chatroomAdminInvites
     const {dispatch,isFetching,errorMsg,
-           chatroomInvites,chatrooms,friends,friendRequestors } = this.props;
+           chatroomInvites,chatrooms,friends,friendRequestors} = this.props;
     
     if(isFetching) {
         return (<Helmet title={`Loading`} ></Helmet>);
@@ -97,7 +116,7 @@ class Sidepanel extends Component {
 
     // if u try having letters other than a-z then you get dodge
     const myImg = displayname.substr(0,1).toLowerCase().match("^[a-z]+$")? displayname.substr(0,1).toLowerCase() :'wow';
-
+    
     return (
       <section id="sidepanel">
         {/* style points for making the titles O SO SEXY */}
@@ -171,7 +190,7 @@ class Sidepanel extends Component {
 
           <Modal
             show={this.state.chatroomManagerOpen}
-            onHide={ () => this.setState({ chatroomManagerOpen: false }) }
+            onHide={ () => {this.checkIfChatReoomCreated();this.setState({ chatroomManagerOpen: false }); } }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -202,6 +221,7 @@ const mapStateToProps = (state) => {
     chatroomInvites:state.initialloadofapp.chatroomInvites,
     //chatroomRequests:state.initialloadofapp.chatroomRequests,
     chatrooms:state.initialloadofapp.chatrooms,
+    chatroom: state.chatroom.chatroom,
     friends:state.initialloadofapp.friends,
     friendRequestors:state.initialloadofapp.friendRequestors
   }

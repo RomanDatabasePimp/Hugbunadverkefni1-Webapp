@@ -198,7 +198,7 @@ class ChatMessageContainer extends Component {
     // if they dont then we just show nothing 
     else {
       // display a happy message
-     theMsgs = <p>Hey it's lonely in here maybe you want to actually talk on a chat app?</p>;
+     theMsgs = <p>Hey it's lonely in here</p>;
     }
 
     return (
