@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import { getUserData, addOrAccepReset} from '../../actions/addAcceptAction';
 
 class Friendrequests extends Component {
 

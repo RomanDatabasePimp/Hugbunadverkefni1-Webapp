@@ -29,6 +29,7 @@ class ChatBouble extends Component {
   state = {
     timer : null,
     newTimeStamp : null,
+    lastMsgRecived :null,
     error: null
   }
 
@@ -56,7 +57,8 @@ class ChatBouble extends Component {
       this.setState({error : res.result.error});
       return;
     }
-    this.setState({newTimeStamp : res.result.lastMessageReceived, error:null});
+    this.setState({newTimeStamp : res.result.lastMessageReceived,
+      lastMsgRecived: res.result.lastRead, error:null});
   }
 
   /* This is a example of when we want them to overwrite the store state since only 
@@ -74,8 +76,13 @@ class ChatBouble extends Component {
   }
 
 render() {
+<<<<<<< HEAD
     const {displayName,lastRead,lastMessageReceived,userRelation } = this.props;
     const {newTimeStamp,error} = this.state;
+=======
+    const {displayName,lastRead,lastMessageReceived} = this.props;
+    const {newTimeStamp,lastMsgRecived,error} = this.state;
+>>>>>>> 682fafb6451d6bf772d53d79ebf45c842aab10af
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
     let chatNewMsg;
@@ -86,7 +93,7 @@ render() {
           so to be safe we just log out the user to be in a safe state */
     if(error) { console.log(error); this.callLogout(); }
     if(newTimeStamp) {
-      chatNewMsg = lastRead < newTimeStamp ? "online" : "offline";
+      chatNewMsg = lastMsgRecived < newTimeStamp ? "online" : "offline";
     } else {
       chatNewMsg = lastRead < lastMessageReceived ? "online" : "offline";
     }
