@@ -7,6 +7,7 @@ import { logoutUser  } from '../../actions/userActions';
 import { getUserData } from '../../actions/initialloadofapp';
 import Friendrequests from '../Friendrequests';
 import ChatBouble from '../ChatBouble';
+import ChatroomForm from '../ChatroomForm';
 
 class Sidepanel extends Component {
 
@@ -16,6 +17,7 @@ class Sidepanel extends Component {
     isSearching:false, // if the user is using the searcg filter option
     showUserPop:false,// indicates if we should show popup for the user info
     filteredChat:[], // the filtered chat
+    chatroomManagerOpen:false // if the chatroomManager is open
   }
 
   async componentDidMount() {
@@ -113,15 +115,15 @@ class Sidepanel extends Component {
             container={this}
             aria-labelledby="contained-modal-title"
           >
-            <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title" className="blacktext">
-                {displayname}'s profile
-              </Modal.Title>
-            </Modal.Header>
-          <Modal.Body className="blacktext">
-            <Friendrequests friendRequestors={friendRequestors}></Friendrequests>
-          </Modal.Body>
-        </Modal>
+            < Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title" className="blacktext">
+                  {displayname}'s profile
+                </Modal.Title>
+              </Modal.Header>
+            <Modal.Body className="blacktext">
+              <Friendrequests friendRequestors={friendRequestors}></Friendrequests>
+            </Modal.Body>
+          </Modal>
 
         {/* -------------------TOP SIDE OF PANEL START--------------------------------------- */}
 
@@ -141,8 +143,24 @@ class Sidepanel extends Component {
         {/* bottom bar  */}
           <div id="bottom-bar">
             <button ><span>Add Friends</span></button>
-            <button ><span>Create Chat</span></button>
+            <button onClick={() => {this.setState({chatroomManagerOpen: true})}}><span>Create Chat</span></button>
           </div>
+          
+          <Modal
+            show={this.state.chatroomManagerOpen}
+            onHide={ () => this.setState({ chatroomManagerOpen: false }) }
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            < Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title" className="blacktext">
+                  Create a new chatroom
+                </Modal.Title>
+              </Modal.Header>
+            <Modal.Body className="blacktext">
+              <ChatroomForm></ChatroomForm>
+            </Modal.Body>
+          </Modal>
         </section>
     );
   }

@@ -277,4 +277,4 @@ export const loginUser = (data) => {
     window.localStorage.setItem('user', JSON.stringify(login.result[0]));    
     return dispatch(receiveLogin(login.result[0]));
   }
-}            
+}
