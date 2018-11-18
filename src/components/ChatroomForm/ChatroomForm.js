@@ -163,7 +163,7 @@ class ChatroomForm extends Component {
             {x}
           </div>
           )}
-          <div id="bottom-bar" className="form-group">
+          <div className="form-group">
             <button ><span>Create chatroom</span></button>
           </div>
         </form>

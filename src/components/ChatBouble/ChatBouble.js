@@ -76,13 +76,8 @@ class ChatBouble extends Component {
   }
 
 render() {
-<<<<<<< HEAD
     const {displayName,lastRead,lastMessageReceived,userRelation } = this.props;
-    const {newTimeStamp,error} = this.state;
-=======
-    const {displayName,lastRead,lastMessageReceived} = this.props;
     const {newTimeStamp,lastMsgRecived,error} = this.state;
->>>>>>> 682fafb6451d6bf772d53d79ebf45c842aab10af
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
     let chatNewMsg;
