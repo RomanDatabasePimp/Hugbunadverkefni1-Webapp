@@ -82,10 +82,13 @@ class Sidepanel extends Component {
     const chatboubles = myChats ?  Object.keys(myChats).map(function (key) {
       return(
         <li className="contact" key={key}>
-          <ChatBouble chatroomName={myChats[key].chatroomName}
+          <ChatBouble 
+            chatroomName={myChats[key].chatroomName}
             displayName={myChats[key].displayName}
             lastMessageReceived={myChats[key].lastMessageReceived}
-            lastRead={myChats[key].lastRead}></ChatBouble>
+            lastRead={myChats[key].lastRead}
+            userRelation={myChats[key].userRelation}
+          ></ChatBouble>
         </li>
       )}): <p></p>;
 
