@@ -1,3 +1,7 @@
+.error {
+  color: red;
+}
+
 .modal_form label{
   width: 75%;
 }
@@ -6,8 +10,15 @@
   margin-bottom: 3em;
 }
 
-#bottom-bar{
-  margin-bottom: 1em;
+.modal_form .form-group {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+}
+
+.modal_form .form-group button{
+  width: 75% !important;
+  margin-right: 0;
 }
 
 .form-box {

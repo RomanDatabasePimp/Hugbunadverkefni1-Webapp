@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createChatroom } from '../../actions/chatroom';
+import { createChatroom, resetChatroomForm } from '../../actions/chatroom';
+import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 
 
 class ChatroomForm extends Component {
@@ -16,20 +17,7 @@ class ChatroomForm extends Component {
     invited_only: true,
     tags: ",jazz, music , test,",
   }
-/*
-  getTags() {
-    console.log(this.state.tags);
-    return this.state.tags.join(', ');
-  }
-
-  onTagChange() {
-    return async (e) => {
-      const value = e.target.value.split(',').map(x => x.trim()).filter(x => x.length > 0);
-      await this.setState({ tags: value });
-      console.log("tags", this.state.tags);
-    }
-  }
-*/
+  
   stringToArray(s) {
     return s.split(',').map(x => x.trim()).filter(x => x.length > 0);
   }
@@ -64,7 +52,8 @@ class ChatroomForm extends Component {
   }
   
   async componentDidMount() {
-
+    const { dispatch } = this.props;
+    dispatch(resetChatroomForm());
   }
   
   render() {
@@ -74,7 +63,7 @@ class ChatroomForm extends Component {
 
     if(isFetching) {
       return (
-        <p>Loading</p>
+        <div className="loader"></div>
       );
     }
 
@@ -84,10 +73,11 @@ class ChatroomForm extends Component {
       )
     }
 
-    let errorMsg;
-    if(error) {
-      errorMsg = <p className="error">Error: {error}</p>;
-    }
+    let errorMsg = error ? 
+      <div className = "form-group ">
+        <p className="error">Error: {error}</p> 
+      </div>
+    : <p></p>;
 
     let fields = [];
     fields.push(
@@ -173,7 +163,7 @@ class ChatroomForm extends Component {
             {x}
           </div>
           )}
-          <div id="bottom-bar">
+          <div id="bottom-bar" className="form-group">
             <button ><span>Create chatroom</span></button>
           </div>
         </form>

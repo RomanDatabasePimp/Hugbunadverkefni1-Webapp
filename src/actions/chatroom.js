@@ -1,9 +1,7 @@
 import { datarequest } from '../api';
 
-
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
-
 // for the creation of chatrooms
+export const CREATE_CHATROOM_RESET = 'RESET_CHATROOM_REQUEST';
 export const CREATE_CHATROOM_REQUEST = 'CREATE_CHATROOM_REQUEST';
 export const CREATE_CHATROOM_SUCCESS = 'CREATE_CHATROOM_SUCCESS';
 export const CREATE_CHATROOM_FAILURE = 'CREATE_CHATROOM_FAILIURE';
@@ -11,6 +9,16 @@ export const CREATE_CHATROOM_FAILURE = 'CREATE_CHATROOM_FAILIURE';
 
 
 // ---------- actions ---------
+
+function chatroomReset() {
+  return {
+    type: CREATE_CHATROOM_RESET,
+    isFetching: false,
+    error: null,
+    chatroom: null,
+    actionSuccess: false,
+  }
+}
 
 function chatroomRequest() {
   return {
@@ -46,7 +54,7 @@ function chatroomSuccess(chatroom) {
 
 export const createChatroom = (data) => {
   return async (dispatch) => {
-    dispatch(chatroomRequest);
+    dispatch(chatroomRequest());
     try{
       const { result, status } = await datarequest('auth/chatroom/', data, 'POST');
 
@@ -58,5 +66,11 @@ export const createChatroom = (data) => {
     } catch (e){
       return dispatch(chatroomError(e));
     }
+  }
+}
+
+export const resetChatroomForm = () => {
+  return async (dispatch) => {
+    await dispatch(chatroomReset());
   }
 }
