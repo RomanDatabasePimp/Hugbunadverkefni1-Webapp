@@ -19,7 +19,8 @@ class Sidepanel extends Component {
     showUserPop:false,// indicates if we should show popup for the user info
     filteredChat:[], // the filtered chat
     chatroomManagerOpen:false, // if the chatroomManager is open
-    friendsButtonOpen:false
+    friendsButtonOpen:false,
+    searchchats:""
   }
 
   async componentDidMount() {
@@ -31,23 +32,36 @@ class Sidepanel extends Component {
     dispatch(getUserData());
   }
   
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.actionSuccess !== this.props.actionSuccess){
+      // since a new chat is open we need to make sure
+      // that a new pulling starts correcly
+      const { dispatch } = this.props;
+      dispatch(getUserData());
+    }
+  } 
   /* Usage : searchMyChats(e)
       For  : e is a input element that has name searchchat
      After : filters the chat array from props to the requested input */
   searchMyChats = (e) => {
+    const { name,value } = e.target;
     const { chatrooms } = this.props;
-    const { searchchats } = e.target;
-    console.log(searchchats);
-    // if the input is empty then we return
-    if(!searchchats) { this.setState({ isSearching:false }); return;  }
+    /* since need to update the chat here elese we can never enter */
+    this.setState({ searchchats:value });
 
-      const filteredchat = [];
-      for(let chatroom in chatrooms ) {
-        let chatname = chatrooms[chatroom].displayName.toLowerCase();
-       
-       
+    /* the string contains spaces or smth we dont want to update the chat */
+    if(!/\S/.test(value)) { this.setState({ isSearching:false }); return;  }
+    const filteredchat = [];
+   
+    for(let chatroom in chatrooms ) {
+      let chatname = chatrooms[chatroom].displayName.toLowerCase();
+      // we always check if the name matches our request if not then serach it by tags
+      if(chatname.match(value.toLowerCase())){
+        filteredchat.push(chatrooms[chatroom]);
       }
-    this.setState({ isSearching:true,filteredChat:filteredchat });
+    }
+    // if we made it here we return the filtered chats that were resulted
+    this.setState({ isSearching:true,filteredChat:filteredchat});
   }
 
   /* Usage : logout()
@@ -58,12 +72,23 @@ class Sidepanel extends Component {
     dispatch(logoutUser());
   }
 
+  /* Usage : checkIfChatReoomCreated()
+      For  : nothing
+     After : checks if a new chatroom has been created
+             if it has then its added to the chatrooms so the user can see them */
+  checkIfChatReoomCreated(){
+    const { chatroom,dispatch } = this.props;
+    if(chatroom){
+      dispatch(getUserData());
+    }
+  }
+
   render() {
     // get the state
-    const { username,displayname,isSearching,filteredChat,showUserPop} = this.state;
+    const { username,displayname,isSearching,filteredChat,showUserPop,searchchats} = this.state;
     // get all the props we can also use this = friendRequestees,chatroomRequests,chatroomAdminInvites
     const {dispatch,isFetching,errorMsg,
-           chatroomInvites,chatrooms,friends,friendRequestors } = this.props;
+           chatroomInvites,chatrooms,friends,friendRequestors} = this.props;
     
     if(isFetching) {
         return (<Helmet title={`Loading`} ></Helmet>);
@@ -82,19 +107,16 @@ class Sidepanel extends Component {
     const chatboubles = myChats ?  Object.keys(myChats).map(function (key) {
       return(
         <li className="contact" key={key}>
-          <ChatBouble 
-            chatroomName={myChats[key].chatroomName}
+          <ChatBouble chatroomName={myChats[key].chatroomName}
             displayName={myChats[key].displayName}
             lastMessageReceived={myChats[key].lastMessageReceived}
-            lastRead={myChats[key].lastRead}
-            userRelation={myChats[key].userRelation}
-          ></ChatBouble>
+            lastRead={myChats[key].lastRead}></ChatBouble>
         </li>
       )}): <p></p>;
 
     // if u try having letters other than a-z then you get dodge
     const myImg = displayname.substr(0,1).toLowerCase().match("^[a-z]+$")? displayname.substr(0,1).toLowerCase() :'wow';
-
+    
     return (
       <section id="sidepanel">
         {/* style points for making the titles O SO SEXY */}
@@ -134,7 +156,7 @@ class Sidepanel extends Component {
 
         {/* The search bar for sorting chats  */}
         <div id="search">
-          <input name="searchchats" type="text" placeholder="Search Chats..." onChange={this.searchMyChats}/>
+          <input type="text" value={searchchats} name="searchAllChats" placeholder="Search chats.." onChange={this.searchMyChats}/>
         </div>
 
         {/* All the chat rooms the user belongs to */}
@@ -168,7 +190,7 @@ class Sidepanel extends Component {
 
           <Modal
             show={this.state.chatroomManagerOpen}
-            onHide={ () => this.setState({ chatroomManagerOpen: false }) }
+            onHide={ () => {this.checkIfChatReoomCreated();this.setState({ chatroomManagerOpen: false }); } }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -199,6 +221,7 @@ const mapStateToProps = (state) => {
     chatroomInvites:state.initialloadofapp.chatroomInvites,
     //chatroomRequests:state.initialloadofapp.chatroomRequests,
     chatrooms:state.initialloadofapp.chatrooms,
+    chatroom: state.chatroom.chatroom,
     friends:state.initialloadofapp.friends,
     friendRequestors:state.initialloadofapp.friendRequestors
   }

@@ -49,6 +49,7 @@ class ChatroomForm extends Component {
       invited_onlylse,
       tags: this.stringToArray(tags),
     }));
+    
   }
   
   async componentDidMount() {
@@ -58,7 +59,7 @@ class ChatroomForm extends Component {
   
   render() {
 
-    const { isFetching, error, chatroom, actionSuccess } = this.props;
+    const { isFetching, error, chatroom, actionSuccess,dispatch } = this.props;
     const { chatroomName, displayName, description, listed, invited_only, tags } = this.state;
 
     if(isFetching) {
@@ -68,6 +69,7 @@ class ChatroomForm extends Component {
     }
 
     if(actionSuccess) {
+      
       return (
         <p>Creation successful</p>
       )
