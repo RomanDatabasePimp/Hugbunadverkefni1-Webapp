@@ -37,18 +37,23 @@ class Sidepanel extends Component {
      After : filters the chat array from props to the requested input */
   searchMyChats = (e) => {
     const { name,value } = e.target;
+    const { chatrooms } = this.props;
+    /* since need to update the chat here elese we can never enter */
+    this.setState({ searchchats:value });
 
-    /* the string contains spaces or smth */
-    if(/\S/.test(value)) { this.setState({ isSearching:false }); return;  }
-
-     /*const filteredchat = [];
-     for(let chatroom in chatrooms ) {
-       let chatname = chatrooms[chatroom].displayName.toLowerCase();
-      
-      
-     }
-    this.setState({ isSearching:true,filteredChat:filteredchat });*/
+    /* the string contains spaces or smth we dont want to update the chat */
+    if(!/\S/.test(value)) { this.setState({ isSearching:false }); return;  }
+    const filteredchat = [];
    
+    for(let chatroom in chatrooms ) {
+      let chatname = chatrooms[chatroom].displayName.toLowerCase();
+      // we always check if the name matches our request if not then serach it by tags
+      if(chatname.match(value.toLowerCase())){
+        filteredchat.push(chatrooms[chatroom]);
+      }
+    }
+    // if we made it here we return the filtered chats that were resulted
+    this.setState({ isSearching:true,filteredChat:filteredchat});
   }
 
   /* Usage : logout()
@@ -83,13 +88,10 @@ class Sidepanel extends Component {
     const chatboubles = myChats ?  Object.keys(myChats).map(function (key) {
       return(
         <li className="contact" key={key}>
-          <ChatBouble 
-            chatroomName={myChats[key].chatroomName}
+          <ChatBouble chatroomName={myChats[key].chatroomName}
             displayName={myChats[key].displayName}
             lastMessageReceived={myChats[key].lastMessageReceived}
-            lastRead={myChats[key].lastRead}
-            userRelation={myChats[key].userRelation}
-          ></ChatBouble>
+            lastRead={myChats[key].lastRead}></ChatBouble>
         </li>
       )}): <p></p>;
 
