@@ -33,14 +33,14 @@ class Sidepanel extends Component {
   searchMyChats = (e) => {
     const { chatrooms } = this.props;
     const { searchchats } = e.target;
-    
+    console.log(searchchats);
     // if the input is empty then we return
     if(!searchchats) { this.setState({ isSearching:false }); return;  }
 
       const filteredchat = [];
       for(let chatroom in chatrooms ) {
         let chatname = chatrooms[chatroom].displayName.toLowerCase();
-        /** TO DO */
+       
        
       }
     this.setState({ isSearching:true,filteredChat:filteredchat });

@@ -34,6 +34,7 @@ class ChatBouble extends Component {
     this.state.timer = setInterval(()=> this.updateChat(), 3000);
   }
   componentWillUnmount() {
+    clearInterval(this.state.timer);
     this.setState({timer:null});
   }
   
@@ -43,7 +44,11 @@ class ChatBouble extends Component {
      out of each other */
   async updateChat() {
     const {chatroomName} = this.props;
-    const res = await noDataRequest(`auth/chatroom/${chatroomName}`,"GET");
+    const res = await noDataRequest(`auth/chatroom/${chatroomName}/membership`,"GET");
+    if(!res) {
+      this.setState({error : "something went very wrong server side"});
+      return;
+    }
     // if error we update the state
     if(res.result.hasOwnProperty("error")) {
       this.setState({error : res.result.error});
@@ -97,6 +102,9 @@ render() {
   }
 }
 
+/* The chat bouble atm dosent need anything from store but maybe it will need later
+   at this moment we need to connect the chatboubles to store so they can tell
+   which chat should be open. */
 const mapStateToProps = (state) => {
   return {
   }
