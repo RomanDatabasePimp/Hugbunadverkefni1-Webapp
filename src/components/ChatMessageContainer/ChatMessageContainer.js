@@ -125,7 +125,6 @@ class ChatMessageContainer extends Component {
      });
    });
    this.setState({myOffestFRONT:chatoffset+chats.result.length , myOffestBACK:chatoffset});
-    
   }
 
   /* Usage : sendMsgToChat()
