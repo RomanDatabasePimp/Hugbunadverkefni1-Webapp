@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createChatroom } from '../../actions/chatroomActions';
-
-import './ChatroomForm.css';
+import { createChatroom } from '../../actions/chatroom';
 
 
 class ChatroomForm extends Component {
@@ -71,10 +69,27 @@ class ChatroomForm extends Component {
   
   render() {
 
+    const { isFetching, error, chatroom, actionSuccess } = this.props;
     const { chatroomName, displayName, description, listed, invited_only, tags } = this.state;
 
-    let fields = [];
+    if(isFetching) {
+      return (
+        <p>Loading</p>
+      );
+    }
 
+    if(actionSuccess) {
+      return (
+        <p>Creation successful</p>
+      )
+    }
+
+    let errorMsg;
+    if(error) {
+      errorMsg = <p className="error">Error: {error}</p>;
+    }
+
+    let fields = [];
     fields.push(
       <label>
         Chatroom name:
@@ -150,7 +165,8 @@ class ChatroomForm extends Component {
     );
 
     return (
-      <section className = "chatroom_form">
+      <section className = "modal_form">
+        {errorMsg}
         <form onSubmit={this.createChatroomHandler}>
           {fields.map((x, i) => 
           <div key={i} className="form-group">
@@ -168,7 +184,10 @@ class ChatroomForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-
+      isFetching: state.chatroom.isFetching,
+      error: state.chatroom.error,
+      chatroom: state.chatroom.chatroom,
+      actionSuccess: state.chatroom.actionSuccess,
     }
 }
 export default connect(mapStateToProps)(ChatroomForm);

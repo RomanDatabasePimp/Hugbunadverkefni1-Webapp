@@ -1,7 +1,6 @@
 import {
   CREATE_CHATROOM_REQUEST, CREATE_CHATROOM_SUCCESS, CREATE_CHATROOM_FAILURE,
-} from '../actions/chatroomActions';
-import { start } from 'repl';
+} from '../actions/chatroom';
 
 const initialState = {
   isFetching: false,
@@ -17,11 +16,29 @@ const user = JSON.parse(localStorage.getItem('user') || 'null');
 export default (state = initialState, action) => {
   switch (action.type) {
     case CREATE_CHATROOM_REQUEST:
-      return action;
+      return {
+        ...state,
+        isFetching: action.isFetching,
+        error: action.error,
+        chatroom: action.chatroom,
+        actionSuccess: action.actionSuccess,
+      };
     case CREATE_CHATROOM_SUCCESS:
-    return action;
+    return {
+      ...state,
+      isFetching: action.isFetching,
+      error: action.error,
+      chatroom: action.chatroom,
+      actionSuccess: action.actionSuccess,
+    };
     case CREATE_CHATROOM_FAILURE:
-      return action;
+    return {
+      ...state,
+      isFetching: action.isFetching,
+      error: action.error,
+      chatroom: action.chatroom,
+      actionSuccess: action.actionSuccess,
+    };
     default:
       return state;
   }

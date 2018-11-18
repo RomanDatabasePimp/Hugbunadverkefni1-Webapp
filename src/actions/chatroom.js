@@ -46,14 +46,17 @@ function chatroomSuccess(chatroom) {
 
 export const createChatroom = (data) => {
   return async (dispatch) => {
-    let result;
-    console.log(data);
+    dispatch(chatroomRequest);
     try{
-      result = await datarequest('auth/chatroom/', data, 'POST');
+      const { result, status } = await datarequest('auth/chatroom/', data, 'POST');
+
+      if(result.hasOwnProperty('error')){
+        return dispatch(chatroomError(result.error));
+      }
+      
+      return dispatch(chatroomSuccess(result))
     } catch (e){
       return dispatch(chatroomError(e));
     }
-
-    console.log(result);
   }
 }
