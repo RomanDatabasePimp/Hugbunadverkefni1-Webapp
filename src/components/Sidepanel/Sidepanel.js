@@ -19,7 +19,8 @@ class Sidepanel extends Component {
     showUserPop:false,// indicates if we should show popup for the user info
     filteredChat:[], // the filtered chat
     chatroomManagerOpen:false, // if the chatroomManager is open
-    friendsButtonOpen:false
+    friendsButtonOpen:false,
+    searchchats:""
   }
 
   async componentDidMount() {
@@ -35,19 +36,19 @@ class Sidepanel extends Component {
       For  : e is a input element that has name searchchat
      After : filters the chat array from props to the requested input */
   searchMyChats = (e) => {
-    const { chatrooms } = this.props;
-    const { searchchats } = e.target;
-    console.log(searchchats);
-    // if the input is empty then we return
-    if(!searchchats) { this.setState({ isSearching:false }); return;  }
+    const { name,value } = e.target;
 
-      const filteredchat = [];
-      for(let chatroom in chatrooms ) {
-        let chatname = chatrooms[chatroom].displayName.toLowerCase();
-       
-       
-      }
-    this.setState({ isSearching:true,filteredChat:filteredchat });
+    /* the string contains spaces or smth */
+    if(/\S/.test(value)) { this.setState({ isSearching:false }); return;  }
+
+     /*const filteredchat = [];
+     for(let chatroom in chatrooms ) {
+       let chatname = chatrooms[chatroom].displayName.toLowerCase();
+      
+      
+     }
+    this.setState({ isSearching:true,filteredChat:filteredchat });*/
+   
   }
 
   /* Usage : logout()
@@ -60,7 +61,7 @@ class Sidepanel extends Component {
 
   render() {
     // get the state
-    const { username,displayname,isSearching,filteredChat,showUserPop} = this.state;
+    const { username,displayname,isSearching,filteredChat,showUserPop,searchchats} = this.state;
     // get all the props we can also use this = friendRequestees,chatroomRequests,chatroomAdminInvites
     const {dispatch,isFetching,errorMsg,
            chatroomInvites,chatrooms,friends,friendRequestors } = this.props;
@@ -131,7 +132,7 @@ class Sidepanel extends Component {
 
         {/* The search bar for sorting chats  */}
         <div id="search">
-          <input name="searchchats" type="text" placeholder="Search Chats..." onChange={this.searchMyChats}/>
+          <input type="text" value={searchchats} name="searchAllChats" placeholder="Search chats.." onChange={this.searchMyChats}/>
         </div>
 
         {/* All the chat rooms the user belongs to */}
