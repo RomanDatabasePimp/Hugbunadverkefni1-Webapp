@@ -1,12 +1,23 @@
 import {
-  CREATE_CHATROOM_REQUEST, CREATE_CHATROOM_SUCCESS, CREATE_CHATROOM_FAILURE, CREATE_CHATROOM_RESET
+  CHATROOM_RESET,
+  CREATE_CHATROOM_REQUEST,
+  CREATE_CHATROOM_SUCCESS,
+  CREATE_CHATROOM_FAILURE,
+  GET_CHATROOM_REQUEST,
+  GET_CHATROOM_SUCCESS,
+  GET_CHATROOM_FAILURE,
+  UPDATE_CHATROOM_REQUEST,
+  UPDATE_CHATROOM_SUCCESS,
+  UPDATE_CHATROOM_FAILURE,
 } from '../actions/chatroom';
 
 const initialState = {
-  isFetching: false,
-  error: null,
+  chatroomIsFetching: false,
+  chatroomError: null,
   chatroom: null,
-  actionSuccess: false,
+  getChatroomSuccess: false,
+  updateChatroomSuccess: false,
+  createChatroomSuccess: false,
 }
 
 // Ef það er notandi í localStorage erum við með innskráðan notanda
@@ -15,37 +26,90 @@ const user = JSON.parse(localStorage.getItem('user') || 'null');
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_CHATROOM_RESET:
+    case CHATROOM_RESET:
       return {
         ...state,
-        isFetching: action.isFetching,
-        error: action.error,
+        chatroomIsFetching: action.chatroomIsFetching,
+        chatroomError: action.chatroomError,
         chatroom: action.chatroom,
-        actionSuccess: action.actionSuccess,
+        getChatroomSuccess: action.getChatroomSuccess,
+        updateChatroomSuccess: action.updateChatroomSuccess,
+        createChatroomSuccess: action.createChatroomSuccess,
       };
+      
+    case GET_CHATROOM_REQUEST:
+      return {
+        ...state,
+        chatroomIsFetching: action.chatroomIsFetching,
+        chatroomError: action.chatroomError,
+        chatroom: action.chatroom,
+        getChatroomSuccess: action.getChatroomSuccess,
+      };
+    case GET_CHATROOM_SUCCESS:
+    return {
+      ...state,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
+      chatroom: action.chatroom,
+      getChatroomSuccess: action.getChatroomSuccess,
+    };
+    case GET_CHATROOM_FAILURE:
+    return {
+      ...state,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
+      chatroom: action.chatroom,
+      getChatroomSuccess: action.getChatroomSuccess,
+    };
+    
+    case UPDATE_CHATROOM_REQUEST:
+      return {
+        ...state,
+        chatroomIsFetching: action.chatroomIsFetching,
+        chatroomError: action.chatroomError,
+        chatroom: action.chatroom,
+        updateChatroomSuccess: action.updateChatroomSuccess,
+      };
+    case UPDATE_CHATROOM_SUCCESS:
+    return {
+      ...state,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
+      chatroom: action.chatroom,
+      updateChatroomSuccess: action.updateChatroomSuccess,
+    };
+    case UPDATE_CHATROOM_FAILURE:
+    return {
+      ...state,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
+      chatroom: action.chatroom,
+      updateChatroomSuccess: action.updateChatroomSuccess,
+    };
+
     case CREATE_CHATROOM_REQUEST:
       return {
         ...state,
-        isFetching: action.isFetching,
-        error: action.error,
+        chatroomIsFetching: action.chatroomIsFetching,
+        chatroomError: action.chatroomError,
         chatroom: action.chatroom,
-        actionSuccess: action.actionSuccess,
+        createChatroomSuccess: action.createChatroomSuccess,
       };
     case CREATE_CHATROOM_SUCCESS:
     return {
       ...state,
-      isFetching: action.isFetching,
-      error: action.error,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
       chatroom: action.chatroom,
-      actionSuccess: action.actionSuccess,
+      createChatroomSuccess: action.createChatroomSuccess,
     };
     case CREATE_CHATROOM_FAILURE:
     return {
       ...state,
-      isFetching: action.isFetching,
-      error: action.error,
+      chatroomIsFetching: action.chatroomIsFetching,
+      chatroomError: action.chatroomError,
       chatroom: action.chatroom,
-      actionSuccess: action.actionSuccess,
+      createChatroomSuccess: action.createChatroomSuccess,
     };
     default:
       return state;

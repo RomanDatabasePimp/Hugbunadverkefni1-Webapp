@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createChatroom, resetChatroomForm } from '../../actions/chatroom';
-import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
+import { createChatroom, resetChatroom, getChatroom, updateChatroom } from '../../actions/chatroom';
 
 
 class ChatroomForm extends Component {
 
-
+  static propTypes = {
+    edit: PropTypes.boolean,
+    chatroomName: PropTypes.string,
+  }
 
   state = {
-    chatroomName: "react1",
-    displayName: "react disp 1",
-    description: "lorem ipsum",
+    chatroomName: "",
+    displayName: "",
+    description: "",
     listed: false,
-    invited_only: true,
-    tags: ",jazz, music , test,",
+    invited_only: false,
+    tags: "",
   }
   
   stringToArray(s) {
     return s.split(',').map(x => x.trim()).filter(x => x.length > 0);
+  }
+  arrayToString(a) {
+    return a.join(', ');
   }
 
   onInputChange(name) {
@@ -38,7 +43,7 @@ class ChatroomForm extends Component {
       displayName,
       description,
       listedlse,
-      invited_onlylse,
+      invited_only,
       tags,
     } = this.state;
     dispatch(createChatroom({
@@ -46,20 +51,61 @@ class ChatroomForm extends Component {
       displayName,
       description,
       listedlse,
-      invited_onlylse,
+      invited_only,
+      tags: this.stringToArray(tags),
+    }));
+  }
+
+  updateChatroomHandler = async (e) => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    const {
+      chatroomName,
+      displayName,
+      description,
+      listedlse,
+      invited_only,
+      tags,
+    } = this.state;
+    dispatch(updateChatroom(chatroomName, {
+      displayName,
+      description,
+      listedlse,
+      invited_only,
       tags: this.stringToArray(tags),
     }));
     
   }
   
   async componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(resetChatroomForm());
+    const { dispatch, edit, chatroomName } = this.props;
+    await dispatch(resetChatroom());
+
+    if(edit && chatroomName){
+      await dispatch(getChatroom(chatroomName));
+      const { chatroom } = this.props;
+      const {
+        displayName,
+        description,
+        listed,
+        invited_only,
+        tags,
+      } = chatroom;
+
+      await this.setState({
+        chatroomName,
+        displayName,
+        description,
+        listed,
+        invited_only,
+        tags: this.arrayToString(tags),
+      });
+    }
   }
   
   render() {
-
-    const { isFetching, error, chatroom, actionSuccess,dispatch } = this.props;
+    
+    const { isFetching, error, chatroom, getChatroomSuccess, updateChatroomSuccess, createChatroomSuccess, edit } = this.props;
     const { chatroomName, displayName, description, listed, invited_only, tags } = this.state;
 
     if(isFetching) {
@@ -68,33 +114,41 @@ class ChatroomForm extends Component {
       );
     }
 
-    if(actionSuccess) {
-      
+    if(createChatroomSuccess) {
       return (
         <p>Creation successful</p>
       )
     }
 
-    let errorMsg = error ? 
-      <div className = "form-group ">
+    const updateSuccessText = updateChatroomSuccess ? 
+    <div className = "form-group">
+      <p className="success">Update successful</p> 
+    </div>
+  : <p></p>; 
+
+    const errorMsg = error ? 
+      <div className = "form-group">
         <p className="error">Error: {error}</p> 
       </div>
     : <p></p>;
 
     let fields = [];
-    fields.push(
-      <label>
-        Chatroom name:
-        <input
-          className="form-control"
-          required={true}
-          type='text'
-          name="chatroomName"
-          value={chatroomName}
-          onChange={this.onInputChange("chatroomName")} 
-        />
-      </label>
-    );
+    // this field is only active when editing
+    if(!edit) {
+      fields.push(
+        <label>
+          Chatroom name:
+          <input
+            className="form-control"
+            required={true}
+            type='text'
+            name="chatroomName"
+            value={chatroomName}
+            onChange={this.onInputChange("chatroomName")} 
+          />
+        </label>
+      );
+    }
     fields.push(
       <label>
         Display name:
@@ -156,17 +210,20 @@ class ChatroomForm extends Component {
       </label>
     );
 
+    const buttonText = edit ? <span>update chatroom</span> : <span>Create chatroom</span>;
+
     return (
       <section className = "modal_form">
+        {updateSuccessText}
         {errorMsg}
-        <form onSubmit={this.createChatroomHandler}>
+        <form onSubmit={edit ? this.updateChatroomHandler : this.createChatroomHandler}>
           {fields.map((x, i) => 
           <div key={i} className="form-group">
             {x}
           </div>
           )}
           <div className="form-group">
-            <button ><span>Create chatroom</span></button>
+            <button>{buttonText}</button>
           </div>
         </form>
       </section>
@@ -179,7 +236,9 @@ const mapStateToProps = (state) => {
       isFetching: state.chatroom.isFetching,
       error: state.chatroom.error,
       chatroom: state.chatroom.chatroom,
-      actionSuccess: state.chatroom.actionSuccess,
+      getChatroomSuccess: state.chatroom.getChatroomSuccess,
+      updateChatroomSuccess: state.chatroom.updateChatroomSuccess,
+      createChatroomSuccess: state.chatroom.createChatroomSuccess,
     }
 }
 export default connect(mapStateToProps)(ChatroomForm);

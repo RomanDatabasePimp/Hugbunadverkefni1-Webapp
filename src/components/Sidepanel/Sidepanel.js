@@ -200,12 +200,14 @@ class Sidepanel extends Component {
                 </Modal.Title>
               </Modal.Header>
             <Modal.Body className="blacktext">
-              <ChatroomForm></ChatroomForm>
+              <ChatroomForm edit={false} chatroomName={""} ></ChatroomForm>
             </Modal.Body>
           </Modal>
         </section>
     );
   }
+
+
 
 }
 
