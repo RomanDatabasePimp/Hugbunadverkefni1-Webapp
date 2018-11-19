@@ -7,6 +7,9 @@ import { noDataRequest } from '../../api';
 import { EROFS } from 'constants';
 import {Modal} from 'react-bootstrap';
 import ChatroomForm from '../ChatroomForm';
+import AdminInviter from '../AdminInviter/AdminInviter';
+import MemberInviter from '../MemberInviter/MemberInviter';
+import ChatroomManager from '../ChatroomManager';
 
 class ChatBouble extends Component {
   /* This will be a pretty sexy chat bouble it will have to poll the data
@@ -22,6 +25,7 @@ class ChatBouble extends Component {
     // we can use PropTypes to define what kind of json obj we want to recive
     chatroomName: PropTypes.string.isRequired,
     displayName: PropTypes.string,
+    userRelation: PropTypes.string,
     lastMessageReceived:PropTypes.number,
     lastRead: PropTypes.number
   }
@@ -46,6 +50,7 @@ class ChatBouble extends Component {
      have what ever was stored last, and in the process they will be rewriting the shit
      out of each other */
   async updateChat() {
+    /*
     const {chatroomName} = this.props;
     const res = await noDataRequest(`auth/chatroom/${chatroomName}/membership`,"GET");
     if(!res) {
@@ -59,13 +64,14 @@ class ChatBouble extends Component {
     }
     this.setState({newTimeStamp : res.result.lastMessageReceived,
       lastMsgRecived: res.result.lastRead, error:null});
+      */
   }
 
   /* This is a example of when we want them to overwrite the store state since only 
      one chat window can be opened at a time, the component that overwrited the store last
      will display its chat */
   openNewChat() {
-    const { dispatch,chatroomName,displayName,lastMessageReceived} = this.props;
+    const { dispatch,chatroomName,displayName,lastMessageReceived } = this.props;
     this.state.lastReadState = lastMessageReceived;
     dispatch(openNewChat(chatroomName,displayName))
   }
@@ -76,7 +82,7 @@ class ChatBouble extends Component {
   }
 
 render() {
-    const {displayName,lastRead,lastMessageReceived,userRelation } = this.props;
+    const {displayName,lastRead,lastMessageReceived,userRelation,chatroomName } = this.props;
     const {newTimeStamp,lastMsgRecived,error} = this.state;
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
@@ -93,8 +99,10 @@ render() {
       chatNewMsg = lastRead < lastMessageReceived ? "online" : "offline";
     }
 
-    const canEdit = userRelation == "ADMIN" || userRelation == "OWNER";
-    const edit = canEdit ? (
+    const isAdmin = userRelation == "ADMIN" || userRelation == "OWNER";
+    const isOwner = userRelation == "OWNER";
+/*
+    const edit = isAdmin ? (
       <div>
         <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
         <Modal
@@ -105,15 +113,29 @@ render() {
         >
           < Modal.Header closeButton>
               <Modal.Title id="contained-modal-title" className="blacktext">
-                Create a new chatroom
+                Manage Chatroom
               </Modal.Title>
             </Modal.Header>
           <Modal.Body className="blacktext">
-            <ChatroomForm></ChatroomForm>
+            <form className = "modal_form">
+              <div className="form-group">
+                <h2>{chatroomName}</h2>
+              </div>
+            </form>
+            <ChatroomForm edit={true} chatroomName={chatroomName}></ChatroomForm>
+            <MemberInviter chatroomName={chatroomName}></MemberInviter>
+            {isOwner ? (<AdminInviter chatroomName={chatroomName}></AdminInviter>) : (<p></p>) }
           </Modal.Body>
         </Modal>
       </div>
     ) : (<p></p>);
+*/
+    const chatmanager = (
+      <ChatroomManager 
+        chatroomName = {chatroomName} 
+        userRelation = {userRelation}>
+      </ChatroomManager>
+    );
 
     return (
       <div>
@@ -121,11 +143,28 @@ render() {
           <span className={chatNewMsg}></span>
           <img src="/img/wow.png" alt="the very wow logo" />
           <div className="meta">
-            <p className="name">{displayName}</p>
+            <p className="name">{displayName} ({chatroomName})</p>
           </div>
         </div>
         <div>
-          {edit}
+          <div>
+            <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
+            <Modal
+              show={this.state.chatroomManagerOpen}
+              onHide={ () => this.setState({ chatroomManagerOpen: false }) }
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              < Modal.Header closeButton>
+                  <Modal.Title id="contained-modal-title" className="blacktext">
+                    Manage Chatroom
+                  </Modal.Title>
+                </Modal.Header>
+              <Modal.Body className="blacktext">
+                {chatmanager}
+              </Modal.Body>
+            </Modal>
+          </div>
         </div>
       </div>
     );
