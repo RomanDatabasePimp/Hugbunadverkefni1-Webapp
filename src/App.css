@@ -6,10 +6,31 @@
   width: 75%;
 }
 
+.border{
+  border-bottom: 5px solid black;
+  margin-bottom: 2em;
+}
+
 .modal_form .form-group {
   display: flex;
   flex-flow: row;
   justify-content: space-around;
+}
+
+.horizontal_list {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.horizontal_list li {
+  display: inline-block;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.horizontal_list li:hover {
+  background-color: #777;
 }
 
 .modal_form .form-group button{
