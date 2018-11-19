@@ -43,8 +43,8 @@ class AddFriendsFrom extends Component {
     const { newUser } = this.state;
     const { isFetching, error, addAccepted } = this.props;
 
-    const err = error ? <p className="error">{error}</p> : <span></span>;
-    const succ = addAccepted ? <p>{`A friend request has been sent to ${newUser}`}</p> : <span></span>
+    const err = error ? <div className="form-group" ><p className="error">{error}</p></div> : <span></span>;
+    const succ = addAccepted ? <div className="form-group" ><p>{`A friend request has been sent to ${newUser}`}</p></div> : <span></span>
     if(isFetching) {
       return (<div className="loader"></div>)
     }
@@ -53,9 +53,11 @@ class AddFriendsFrom extends Component {
       <form className="modal_form" onSubmit={this.handleSubmit}>
           {succ}
           {err}
-          <label>New friends username 
-            <input className="form-control" type="text" value={newUser} name="newUser" required placeholder="Friends username" onChange={this.handleInputChange} autofocus/>
-          </label>
+          <div className="form-group" >
+            <label >New friends username 
+              <input className="form-control" type="text" value={newUser} name="newUser" required placeholder="Friends username" onChange={this.handleInputChange} autoFocus/>
+            </label>
+          </div>
       </form>
     )
   }

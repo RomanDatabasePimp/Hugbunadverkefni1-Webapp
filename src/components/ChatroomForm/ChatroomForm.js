@@ -74,6 +74,7 @@ class ChatroomForm extends Component {
       invited_only,
       tags: this.stringToArray(tags),
     }));
+    
   }
   
   async componentDidMount() {
