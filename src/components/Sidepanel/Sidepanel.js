@@ -110,7 +110,8 @@ class Sidepanel extends Component {
           <ChatBouble chatroomName={myChats[key].chatroomName}
             displayName={myChats[key].displayName}
             lastMessageReceived={myChats[key].lastMessageReceived}
-            lastRead={myChats[key].lastRead}></ChatBouble>
+            lastRead={myChats[key].lastRead}
+            userRelation={myChats[key].userRelation}></ChatBouble>
         </li>
       )}): <p></p>;
 

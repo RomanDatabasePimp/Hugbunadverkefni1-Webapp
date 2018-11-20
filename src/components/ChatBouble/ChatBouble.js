@@ -25,9 +25,9 @@ class ChatBouble extends Component {
     // we can use PropTypes to define what kind of json obj we want to recive
     chatroomName: PropTypes.string.isRequired,
     displayName: PropTypes.string,
-    userRelation: PropTypes.string,
+    userRelation: PropTypes.string.isRequired,
     lastMessageReceived:PropTypes.number,
-    lastRead: PropTypes.number
+    lastRead: PropTypes.number,
   }
 
   state = {
@@ -99,43 +99,6 @@ render() {
       chatNewMsg = lastRead < lastMessageReceived ? "online" : "offline";
     }
 
-    const isAdmin = userRelation == "ADMIN" || userRelation == "OWNER";
-    const isOwner = userRelation == "OWNER";
-/*
-    const edit = isAdmin ? (
-      <div>
-        <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
-        <Modal
-          show={this.state.chatroomManagerOpen}
-          onHide={ () => this.setState({ chatroomManagerOpen: false }) }
-          container={this}
-          aria-labelledby="contained-modal-title"
-        >
-          < Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title" className="blacktext">
-                Manage Chatroom
-              </Modal.Title>
-            </Modal.Header>
-          <Modal.Body className="blacktext">
-            <form className = "modal_form">
-              <div className="form-group">
-                <h2>{chatroomName}</h2>
-              </div>
-            </form>
-            <ChatroomForm edit={true} chatroomName={chatroomName}></ChatroomForm>
-            <MemberInviter chatroomName={chatroomName}></MemberInviter>
-            {isOwner ? (<AdminInviter chatroomName={chatroomName}></AdminInviter>) : (<p></p>) }
-          </Modal.Body>
-        </Modal>
-      </div>
-    ) : (<p></p>);
-*/
-    const chatmanager = (
-      <ChatroomManager 
-        chatroomName = {chatroomName} 
-        userRelation = {userRelation}>
-      </ChatroomManager>
-    );
 
     return (
       <div>
@@ -161,7 +124,10 @@ render() {
                   </Modal.Title>
                 </Modal.Header>
               <Modal.Body className="blacktext">
-                {chatmanager}
+                <ChatroomManager 
+                  chatroomName = {chatroomName} 
+                  userRelation = {userRelation}>
+                </ChatroomManager>
               </Modal.Body>
             </Modal>
           </div>

@@ -22,6 +22,8 @@ class ChatroomManager extends Component {
   render() {
     const { chatroomName, userRelation } = this.props;
 
+    console.log(userRelation);
+
     const isAdmin = userRelation == "ADMIN" || userRelation == "OWNER";
     const isOwner = userRelation == "OWNER";
 
