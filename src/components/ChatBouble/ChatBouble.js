@@ -50,7 +50,6 @@ class ChatBouble extends Component {
      have what ever was stored last, and in the process they will be rewriting the shit
      out of each other */
   async updateChat() {
-    /*
     const {chatroomName} = this.props;
     const res = await noDataRequest(`auth/chatroom/${chatroomName}/membership`,"GET");
     if(!res) {
@@ -64,7 +63,6 @@ class ChatBouble extends Component {
     }
     this.setState({newTimeStamp : res.result.lastMessageReceived,
       lastMsgRecived: res.result.lastRead, error:null});
-      */
   }
 
   /* This is a example of when we want them to overwrite the store state since only 
