@@ -9,9 +9,11 @@ import Friendrequests from '../Friendrequests';
 import ChatBouble from '../ChatBouble';
 import ChatroomForm from '../ChatroomForm';
 import AddFriendsFrom from '../addFriendsForm';
+import ChatRoominvs from '../Chatroominvs';
+import AdminChatIn from '../AdminChatInv';
 
 class Sidepanel extends Component {
-
+  
   state = {
     username: '',    // i dont know if i need this just good to have it for later
     displayname: '', // need to show the display name
@@ -72,17 +74,11 @@ class Sidepanel extends Component {
     dispatch(logoutUser());
   }
 
-
-  updateUserAfterEvent(){
-    const { dispatch } = this.props;
-      dispatch(getUserData());
-  }
-
   render() {
     // get the state
     const { username,displayname,isSearching,filteredChat,showUserPop,searchchats} = this.state;
     // get all the props we can also use this = friendRequestees,chatroomRequests,chatroomAdminInvites
-    const {dispatch,isFetching,errorMsg,
+    const {dispatch,isFetching,errorMsg,chatroomAdminInvites,
            chatroomInvites,chatrooms,friends,friendRequestors} = this.props;
     
     if(isFetching) {
@@ -123,7 +119,7 @@ class Sidepanel extends Component {
           {/* Shows the displayname of the user logged in and allows you to click on it
               to get your user things */}
           <div id="profile">
-            <div className="wrap" onClick={() => this.setState({ showUserPop: true })}>
+            <div className="wrap" onClick={() => { dispatch(getUserData());this.setState({ showUserPop: true })} }>
               {/* get the image with the first name  */}
               <img id="profile-img" src={`/img/${myImg}.png`} alt="very wow logo" className="online" />
               <p>{displayname}</p>
@@ -134,7 +130,7 @@ class Sidepanel extends Component {
               with all his stuff */}
           <Modal
             show={this.state.showUserPop}
-            onHide={ () => this.setState({ showUserPop: false }) }
+            onHide={ () => { dispatch(getUserData()); this.setState({ showUserPop: false })} }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -145,6 +141,8 @@ class Sidepanel extends Component {
               </Modal.Header>
             <Modal.Body className="blacktext">
               <Friendrequests friendRequestors={friendRequestors}></Friendrequests>
+              <ChatRoominvs chatroomInv={chatroomInvites}></ChatRoominvs>
+              <AdminChatIn adminchatroomInv={chatroomAdminInvites}></AdminChatIn>
             </Modal.Body>
           </Modal>
 
@@ -170,7 +168,7 @@ class Sidepanel extends Component {
           </div>
           <Modal
             show={this.state.friendsButtonOpen}
-            onHide={ () => {this.updateUserAfterEvent(); this.setState({ friendsButtonOpen: false })} }
+            onHide={ () => { dispatch(getUserData()); this.setState({ friendsButtonOpen: false })} }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -186,7 +184,7 @@ class Sidepanel extends Component {
 
           <Modal
             show={this.state.chatroomManagerOpen}
-            onHide={ () => {this.updateUserAfterEvent();this.setState({ chatroomManagerOpen: false }); } }
+            onHide={ () => { dispatch(getUserData()); this.setState({ chatroomManagerOpen: false }); } }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -214,7 +212,7 @@ const mapStateToProps = (state) => {
   return {
     isFetching: state.initialloadofapp.isFetching,
     errorMsg: state.initialloadofapp.errorMsg,
-    //chatroomAdminInvites:state.initialloadofapp.chatroomAdminInvites,
+    chatroomAdminInvites:state.initialloadofapp.chatroomAdminInvites,
     //friendRequestees:state.initialloadofapp.friendRequestees,
     chatroomInvites:state.initialloadofapp.chatroomInvites,
     //chatroomRequests:state.initialloadofapp.chatroomRequests,

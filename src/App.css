@@ -1,3 +1,20 @@
+.request_border {
+  border: 1px solid black;
+  margin-right: 0.5em;
+  border-radius: 10px;
+}
+.request_border button {
+  margin-right: 5px;
+  font-weight: bold;
+}
+.request_border .acc:hover {
+  background-color: green;
+}
+.request_border .rej:hover {
+  background-color: red;
+}
+
+
 .error {
   color: red;
 }
@@ -10,10 +27,32 @@
   width: 75%;
 }
 
+.border{
+  border-bottom: 5px solid black;
+  margin-bottom: 2em;
+}
+
 .modal_form .form-group {
   display: flex;
   flex-flow: row;
   justify-content: space-around;
+}
+
+.horizontal_list {
+  font-weight: bold;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.horizontal_list li {
+  display: inline-block;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.horizontal_list li:hover {
+  background-color: lightblue;
 }
 
 .modal_form .form-group button{

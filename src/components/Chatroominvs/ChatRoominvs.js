@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addOrAcceptUser, addOrAccepReset,rejectFriend} from '../../actions/addAcceptAction';
+import {  addOrAccepReset, acceptChatInv,rejectChatInv} from '../../actions/addAcceptAction';
 
-class Friendrequests extends Component {
+class ChatRoominvs extends Component {
 
   static propTypes = {
-    friendRequestors: PropTypes.array,
+    chatroomInv : PropTypes.array,
   }
 
   state = {
-    friends : [],
+    Chatrooms : [],
     didIUpdate : false
   }
   
   componentDidMount() {
-    const { dispatch,friendRequestors } = this.props;
-    this.setState({friends:friendRequestors});
+    const { dispatch,chatroomInv } = this.props;
+    this.setState({Chatrooms:chatroomInv,didIUpdate:false});
     dispatch(addOrAccepReset());
   }
 
@@ -24,66 +24,57 @@ class Friendrequests extends Component {
       For  : val is the username 
      After : removes val from requests */
   removeFromRequests(val) {
-    const  temp = this.state.friends;
+    const  temp = this.state.Chatrooms;
     temp.map((i,key) => {
-      if(i.username === val) {
+      if(i.chatroomName === val) {
         temp.splice(key,1);
       }
     });
-    this.setState({ friends : temp,didIUpdate:true});
+    this.setState({ Chatrooms : temp,didIUpdate:true});
   }
 
-  /* Usage : acceptFriend(e)
-       FOr : e is a button with value
-     After : calls an acction that accepts friend  */
-  acceptFriend(e) {
+  acceptChat(e) {
     const { dispatch } = this.props;
     const { value } = e.target;
-    dispatch(addOrAcceptUser(value,"POST"));
+    dispatch(acceptChatInv(value,"POST"));
     this.removeFromRequests(value);
   }
-
-  /* Usage : acceptFriend(e)
-       FOr : e is a button with value
-     After : calls an acction that accepts friend  */
-  rejectFriend(e) {
+    
+  rejectchat(e) {
     const { dispatch } = this.props;
     const { value } = e.target;
-    dispatch(rejectFriend(value));
+    dispatch(rejectChatInv(value));
     this.removeFromRequests(value);
   }
-
+    
   render() {
-    /* array of user:{ user : {username:,displayName: }} */
-    const { friends,didIUpdate } = this.state;
+    const { Chatrooms,didIUpdate } = this.state;
     const { isFetching,error, addAccepted } = this.props;
 
     if(isFetching && didIUpdate) {
       return ( <div className="loader"></div>)
     }
     this.state.didIUpdate = false;
-
     const errs = error && didIUpdate ? <p className="error"> {error} </p> : <span></span>;
     const succ = addAccepted && didIUpdate ? <p>Success !</p> : <span></span>;
     
-
-    //{username: "dah38", displayName: "Davíð"}
-    const friendrequests = friends.length > 0 ? 
-    friends.map((item,key) => {
+    // {chatroomName: "c6", displayName: "disp6", description: "desc6", listed: true, invited_only: true, …}
+    const chatrequests = Chatrooms.length > 0 ? 
+    Chatrooms.map((item,key) => {
      return(<li key={key} className="request_border">
-              <p>{item.displayName}</p>
-              <button className="button acc" value={item.username} onClick={this.acceptFriend.bind(this)}>Accept</button>
-              <button className="button rej" value={item.username} onClick={this.rejectFriend.bind(this)}>Reject</button>
+              <p>Name :{item.displayName}</p>
+              <button className="button acc" value={item.chatroomName} onClick={this.acceptChat.bind(this)}>Accept</button>
+              <button className="button rej" value={item.chatroomName} onClick={this.rejectchat.bind(this)}>Reject</button>
             </li>)
     }) : <p>No new invites</p>;
-
+    
     return (
       <div className="border">
-        <h3>Friend Requests</h3>
+        <h3>Member Chatroom Invites</h3>
         {errs}
         {succ}
         <ul className="horizontal_list">
-          {friendrequests}
+          {chatrequests}
         </ul>
       </div>
     );
@@ -103,4 +94,4 @@ const mapStateToProps = (state) => {
 
 /* make this component aware of the aplication store 
    þetta er ekki lengur component heldur Container */
- export default connect(mapStateToProps)(Friendrequests);
+ export default connect(mapStateToProps)(ChatRoominvs);
