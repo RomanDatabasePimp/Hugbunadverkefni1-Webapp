@@ -66,6 +66,29 @@ export const addOrAcceptUser = (usr,method) => {
   }
 }
 
+/* Usage : dispatch(acceptChatInv(val))
+    For  : val is the chatname
+    After: sends a HTTP POST REQUEST http://localhost:9090/auth/chatroom/{chatroom}/join
+           and returns whatever the server returns */
+export const acceptChatInv = (val) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptRequest());
+    try{
+      let request = await datarequest(`auth/chatroom/${val}/join`,{},"POST");
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
+      }
+      return dispatch(addOrAcceptSuccess());
+    } catch (e){
+      return dispatch(addOrAcceptError(e));
+    }
+  }
+}
+
+
+
 /* Usage : dispatch(rejectFriend(usr))
     For  : usr is the username of the add er accepted client
     After: sends a HTTP POST REQUEST /auth/user/friends/{usr} 

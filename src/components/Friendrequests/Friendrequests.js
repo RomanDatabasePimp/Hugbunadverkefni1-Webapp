@@ -55,11 +55,7 @@ class Friendrequests extends Component {
   render() {
     /* array of user:{ user : {username:,displayName: }} */
     const { friends } = this.state;
-    const { isFetching, error, addAccepted } = this.props;
-    
-    if(isFetching) {
-      return (<div className="loader"></div>)
-    }
+    const {  error, addAccepted } = this.props;
 
     const errs = error ? <p className="error"> {error} </p> : <span></span>;
     const succ = addAccepted ? <p>Success !</p> : <span></span>;
@@ -92,7 +88,6 @@ class Friendrequests extends Component {
   auth er reducer sem er sameinaður i index.js */
 const mapStateToProps = (state) => {
   return {
-    isFetching: state.addAcceptAction.isFetching,
     error: state.addAcceptAction.error,
     addAccepted: state.addAcceptAction.addAccepted
   }
