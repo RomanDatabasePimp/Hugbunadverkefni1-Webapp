@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {  addOrAccepReset, acceptChatInv,rejectChatInv} from '../../actions/addAcceptAction';
+import {  addOrAccepReset,acceptAdminChatInv,rejectAdminChatInv} from '../../actions/addAcceptAction';
 
-class ChatRoominvs extends Component {
+class AdminChatInv extends Component {
 
   static propTypes = {
-    chatroomInv : PropTypes.array,
+    adminchatroomInv : PropTypes.array,
   }
 
   state = {
     Chatrooms : [],
     didIUpdate : false
   }
-  
+
   componentDidMount() {
-    const { dispatch,chatroomInv } = this.props;
-    this.setState({Chatrooms:chatroomInv,didIUpdate:false});
+    const { dispatch,adminchatroomInv } = this.props;
+    this.setState({Chatrooms:adminchatroomInv});
     dispatch(addOrAccepReset());
   }
 
@@ -36,14 +36,14 @@ class ChatRoominvs extends Component {
   acceptChat(e) {
     const { dispatch } = this.props;
     const { value } = e.target;
-    dispatch(acceptChatInv(value,"POST"));
+    dispatch(acceptAdminChatInv(value));
     this.removeFromRequests(value);
   }
     
   rejectchat(e) {
     const { dispatch } = this.props;
     const { value } = e.target;
-    dispatch(rejectChatInv(value));
+    dispatch(rejectAdminChatInv(value));
     this.removeFromRequests(value);
   }
     
@@ -55,8 +55,10 @@ class ChatRoominvs extends Component {
       return ( <div className="loader"></div>)
     }
     this.state.didIUpdate = false;
+
     const errs = error && didIUpdate ? <p className="error"> {error} </p> : <span></span>;
     const succ = addAccepted && didIUpdate ? <p>Success !</p> : <span></span>;
+    
     
     // {chatroomName: "c6", displayName: "disp6", description: "desc6", listed: true, invited_only: true, …}
     const chatrequests = Chatrooms.length > 0 ? 
@@ -70,7 +72,7 @@ class ChatRoominvs extends Component {
     
     return (
       <div className="border">
-        <h3>Member Chatroom Invites</h3>
+        <h3>Admin Member Chatroom Invites</h3>
         {errs}
         {succ}
         <ul className="horizontal_list">
@@ -94,4 +96,4 @@ const mapStateToProps = (state) => {
 
 /* make this component aware of the aplication store 
    þetta er ekki lengur component heldur Container */
- export default connect(mapStateToProps)(ChatRoominvs);
+ export default connect(mapStateToProps)(AdminChatInv);

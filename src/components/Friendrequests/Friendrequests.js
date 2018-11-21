@@ -10,7 +10,8 @@ class Friendrequests extends Component {
   }
 
   state = {
-    friends : []
+    friends : [],
+    didIUpdate : false
   }
   
   componentDidMount() {
@@ -29,7 +30,7 @@ class Friendrequests extends Component {
         temp.splice(key,1);
       }
     });
-   this.setState({ friends : temp});
+    this.setState({ friends : temp,didIUpdate:true});
   }
 
   /* Usage : acceptFriend(e)
@@ -54,11 +55,17 @@ class Friendrequests extends Component {
 
   render() {
     /* array of user:{ user : {username:,displayName: }} */
-    const { friends } = this.state;
-    const {  error, addAccepted } = this.props;
+    const { friends,didIUpdate } = this.state;
+    const { isFetching,error, addAccepted } = this.props;
 
-    const errs = error ? <p className="error"> {error} </p> : <span></span>;
-    const succ = addAccepted ? <p>Success !</p> : <span></span>;
+    if(isFetching && didIUpdate) {
+      return ( <div className="loader"></div>)
+    }
+    this.state.didIUpdate = false;
+
+    const errs = error && didIUpdate ? <p className="error"> {error} </p> : <span></span>;
+    const succ = addAccepted && didIUpdate ? <p>Success !</p> : <span></span>;
+    
 
     //{username: "dah38", displayName: "Davíð"}
     const friendrequests = friends.length > 0 ? 
@@ -68,7 +75,7 @@ class Friendrequests extends Component {
               <button className="button acc" value={item.username} onClick={this.acceptFriend.bind(this)}>Accept</button>
               <button className="button rej" value={item.username} onClick={this.rejectFriend.bind(this)}>Reject</button>
             </li>)
-    }) : <p>Looks like you have no friend requests</p>;
+    }) : <p>No new invites</p>;
 
     return (
       <div className="border">
@@ -88,6 +95,7 @@ class Friendrequests extends Component {
   auth er reducer sem er sameinaður i index.js */
 const mapStateToProps = (state) => {
   return {
+    isFetching:  state.addAcceptAction.isFetching,
     error: state.addAcceptAction.error,
     addAccepted: state.addAcceptAction.addAccepted
   }

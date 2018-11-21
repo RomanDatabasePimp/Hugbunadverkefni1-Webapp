@@ -44,6 +44,10 @@ function addOrAcceptResetState() {
   }
 }
 
+
+/* SOORRYY :(((( LITILL TIMI VAR EFTIR HER I FEEL ASHAMED TO DO THIS :( 
+    HAVE MERCY ON ME  */
+
 /* Usage : dispatch(addOrAcceptUser(usr,method))
     For  : usr is the username of the add er accepted client
     After: sends a HTTP POST REQUEST /auth/user/friends/{usr} 
@@ -87,6 +91,69 @@ export const acceptChatInv = (val) => {
   }
 }
 
+/* Usage : dispatch(rejectChatInv(val))
+    For  : val is the chatname
+    After: sends a HTTP POST REQUEST http://localhost:9090/auth/chatroom/{chatroom}/join
+           and returns whatever the server returns */
+export const rejectChatInv = (val) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptRequest());
+    try{
+      let request = await datarequest(`auth/chatroom/${val}/rejectchatroominvite`,{},"DELETE");
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
+      }
+      return dispatch(addOrAcceptSuccess());
+    } catch (e){
+      return dispatch(addOrAcceptError(e));
+    }
+  }
+}
+
+/* Usage : dispatch(acceptAdminChatInv(val))
+    For  : val is the chatname
+    After: sends a HTTP POST REQUEST http://localhost:9090/auth/chatroom/{chatroomName}/acceptadmininvite
+           and returns whatever the server returns */
+export const acceptAdminChatInv = (val) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptRequest());
+    try{
+      let request = await datarequest(`auth/chatroom/${val}/acceptadmininvite`,{},"POST");
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
+      }
+      return dispatch(addOrAcceptSuccess());
+    } catch (e){
+      return dispatch(addOrAcceptError(e));
+    }
+  }
+}
+
+
+/* Usage : dispatch(rejectAdminChatInv(val))
+    For  : val is the chatname
+    After: sends a HTTP DELETE REQUEST http://localhost:9090/auth/chatroom/{chatroomName}/rejectadmininvite
+           and returns whatever the server returns */
+export const rejectAdminChatInv = (val) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptRequest());
+    try{
+      let request = await noDataRequest(`auth/chatroom/${val}/rejectadmininvite`,"DELETE");
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
+      }
+      return dispatch(addOrAcceptSuccess());
+    } catch (e){
+      return dispatch(addOrAcceptError(e));
+    }
+  }
+}
 
 
 /* Usage : dispatch(rejectFriend(usr))

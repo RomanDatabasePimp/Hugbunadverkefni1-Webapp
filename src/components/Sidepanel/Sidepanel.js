@@ -10,6 +10,7 @@ import ChatBouble from '../ChatBouble';
 import ChatroomForm from '../ChatroomForm';
 import AddFriendsFrom from '../addFriendsForm';
 import ChatRoominvs from '../Chatroominvs';
+import AdminChatIn from '../AdminChatInv';
 
 class Sidepanel extends Component {
   
@@ -77,7 +78,7 @@ class Sidepanel extends Component {
     // get the state
     const { username,displayname,isSearching,filteredChat,showUserPop,searchchats} = this.state;
     // get all the props we can also use this = friendRequestees,chatroomRequests,chatroomAdminInvites
-    const {dispatch,isFetching,errorMsg,
+    const {dispatch,isFetching,errorMsg,chatroomAdminInvites,
            chatroomInvites,chatrooms,friends,friendRequestors} = this.props;
     
     if(isFetching) {
@@ -141,6 +142,7 @@ class Sidepanel extends Component {
             <Modal.Body className="blacktext">
               <Friendrequests friendRequestors={friendRequestors}></Friendrequests>
               <ChatRoominvs chatroomInv={chatroomInvites}></ChatRoominvs>
+              <AdminChatIn adminchatroomInv={chatroomAdminInvites}></AdminChatIn>
             </Modal.Body>
           </Modal>
 
@@ -210,7 +212,7 @@ const mapStateToProps = (state) => {
   return {
     isFetching: state.initialloadofapp.isFetching,
     errorMsg: state.initialloadofapp.errorMsg,
-    //chatroomAdminInvites:state.initialloadofapp.chatroomAdminInvites,
+    chatroomAdminInvites:state.initialloadofapp.chatroomAdminInvites,
     //friendRequestees:state.initialloadofapp.friendRequestees,
     chatroomInvites:state.initialloadofapp.chatroomInvites,
     //chatroomRequests:state.initialloadofapp.chatroomRequests,
