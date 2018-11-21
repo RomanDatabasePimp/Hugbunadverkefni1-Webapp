@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getUserData, addOrAccepReset} from '../../actions/addAcceptAction';
+import { addOrAcceptUser, addOrAccepReset,rejectFriend} from '../../actions/addAcceptAction';
 
 class Friendrequests extends Component {
 
@@ -9,34 +9,78 @@ class Friendrequests extends Component {
     friendRequestors: PropTypes.array,
   }
 
+  state = {
+    friends : []
+  }
+  
+  componentDidMount() {
+    const { dispatch,friendRequestors } = this.props;
+    this.setState({friends:friendRequestors});
+    dispatch(addOrAccepReset());
+  }
 
+  /* Usage : removeFromRequests(val)
+      For  : val is the username 
+     After : removes val from requests */
+  removeFromRequests(val) {
+    const  temp = this.state.friends;
+    temp.map((i,key) => {
+      if(i.username === val) {
+        temp.splice(key,1);
+      }
+    });
+   this.setState({ friends : temp});
+  }
+
+  /* Usage : acceptFriend(e)
+       FOr : e is a button with value
+     After : calls an acction that accepts friend  */
+  acceptFriend(e) {
+    const { dispatch } = this.props;
+    const { value } = e.target;
+    dispatch(addOrAcceptUser(value,"POST"));
+    this.removeFromRequests(value);
+  }
+
+  /* Usage : acceptFriend(e)
+       FOr : e is a button with value
+     After : calls an acction that accepts friend  */
+  rejectFriend(e) {
+    const { dispatch } = this.props;
+    const { value } = e.target;
+    dispatch(rejectFriend(value));
+    this.removeFromRequests(value);
+  }
 
   render() {
     /* array of user:{ user : {username:,displayName: }} */
-    const {friendRequestors} = this.props;
-    //{username: "dah38", displayName: "Davíð"}
-    const friendrequests = friendRequestors.length > 0 ? 
-    friendRequestors.map((item,key) => {
-     return(<li key={key}>
-              <p>{item.displayName}</p>
-            </li>)
-    }) : <li>Looks like you have no friend requests</li>;
-
+    const { friends } = this.state;
+    const { isFetching, error, addAccepted } = this.props;
     
+    if(isFetching) {
+      return (<div className="loader"></div>)
+    }
+
+    const errs = error ? <p className="error"> {error} </p> : <span></span>;
+    const succ = addAccepted ? <p>Success !</p> : <span></span>;
+
+    //{username: "dah38", displayName: "Davíð"}
+    const friendrequests = friends.length > 0 ? 
+    friends.map((item,key) => {
+     return(<li key={key} className="request_border">
+              <p>{item.displayName}</p>
+              <button className="button acc" value={item.username} onClick={this.acceptFriend.bind(this)}>Accept</button>
+              <button className="button rej" value={item.username} onClick={this.rejectFriend.bind(this)}>Reject</button>
+            </li>)
+    }) : <p>Looks like you have no friend requests</p>;
 
     return (
       <div className="border">
         <h3>Friend Requests</h3>
+        {errs}
+        {succ}
         <ul className="horizontal_list">
           {friendrequests}
-          <div>
-  <input type="checkbox" id="horns" name="horns" />
-  <label for="horns">Accept</label>
-</div>
-<div>
-  <input type="checkbox" id="horns" name="horns" />
-  <label for="horns">Reject</label>
-</div>
         </ul>
       </div>
     );
@@ -48,7 +92,9 @@ class Friendrequests extends Component {
   auth er reducer sem er sameinaður i index.js */
 const mapStateToProps = (state) => {
   return {
-  
+    isFetching: state.addAcceptAction.isFetching,
+    error: state.addAcceptAction.error,
+    addAccepted: state.addAcceptAction.addAccepted
   }
 }
 

@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import {Modal} from 'react-bootstrap';
-import { logoutUser  } from '../../actions/userActions';
-import { getUserData } from '../../actions/initialloadofapp';
 import { addOrAcceptUser, addOrAccepReset} from '../../actions/addAcceptAction';
 
 class AddFriendsFrom extends Component {
@@ -36,7 +32,7 @@ class AddFriendsFrom extends Component {
     e.preventDefault();
     const { dispatch } = this.props;
     const { newUser } = this.state;
-    dispatch(addOrAcceptUser(newUser));
+    dispatch(addOrAcceptUser(newUser,"POST"));
   }
 
   render() {

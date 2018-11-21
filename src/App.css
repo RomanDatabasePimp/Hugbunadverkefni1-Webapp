@@ -1,3 +1,20 @@
+.request_border {
+  border: 1px solid black;
+  margin-right: 0.5em;
+  border-radius: 10px;
+}
+.request_border button {
+  margin-right: 5px;
+  font-weight: bold;
+}
+.request_border .acc:hover {
+  background-color: green;
+}
+.request_border .rej:hover {
+  background-color: red;
+}
+
+
 .error {
   color: red;
 }
@@ -18,6 +35,7 @@
 }
 
 .horizontal_list {
+  font-weight: bold;
   overflow: auto;
   white-space: nowrap;
 }
@@ -30,7 +48,7 @@
 }
 
 .horizontal_list li:hover {
-  background-color: #777;
+  background-color: lightblue;
 }
 
 .modal_form .form-group button{

@@ -1,4 +1,4 @@
-import { datarequest } from '../api';
+import { datarequest,noDataRequest } from '../api';
 /* the way we add and accept friends is the same , i.e same function calls
    but the server responds differantly so we basicly one action that 
    handles two things */
@@ -44,18 +44,41 @@ function addOrAcceptResetState() {
   }
 }
 
-/* Usage : dispatch(addOrAcceptUser(usr))
+/* Usage : dispatch(addOrAcceptUser(usr,method))
     For  : usr is the username of the add er accepted client
     After: sends a HTTP POST REQUEST /auth/user/friends/{usr} 
            and returns whatever the server returns */
-export const addOrAcceptUser = (usr) => {
+export const addOrAcceptUser = (usr,method) => {
   return async (dispatch) => {
     dispatch(addOrAcceptRequest());
     try{
-      let request = await datarequest(`auth/user/friends/${usr}`,{},'POST');
+      let request = await datarequest(`auth/user/friends/${usr}`,{},method);
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
+      }
+      return dispatch(addOrAcceptSuccess());
 
-      if(request.result.hasOwnProperty('error')){
-        return dispatch(addOrAcceptError(request.result.error));
+    } catch (e){
+      return dispatch(addOrAcceptError(e));
+    }
+  }
+}
+
+/* Usage : dispatch(rejectFriend(usr))
+    For  : usr is the username of the add er accepted client
+    After: sends a HTTP POST REQUEST /auth/user/friends/{usr} 
+           and returns whatever the server returns */
+export const rejectFriend = (usr) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptRequest());
+    try{
+      let request = await noDataRequest(`auth/user/friendRequest/${usr}`,"DELETE");
+      if(request.result){
+        if(request.result.hasOwnProperty('error')) {
+          return dispatch(addOrAcceptError(request.result.error));
+        }
       }
       return dispatch(addOrAcceptSuccess());
 
