@@ -81,7 +81,7 @@ class ChatBouble extends Component {
   }
 
 render() {
-    const {displayName,lastRead,lastMessageReceived,userRelation,chatroomName } = this.props;
+    const {displayName,lastRead,lastMessageReceived,userRelation,chatroomName,dispatch } = this.props;
     const {newTimeStamp,lastMsgRecived,error} = this.state;
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
@@ -115,7 +115,7 @@ render() {
               show={this.state.chatroomManagerOpen}
               onHide={ () => {
                 this.setState({ chatroomManagerOpen: false });
-                dispatchEvent(getUserData());
+                dispatch(getUserData());
               }}
               container={this}
               aria-labelledby="contained-modal-title"

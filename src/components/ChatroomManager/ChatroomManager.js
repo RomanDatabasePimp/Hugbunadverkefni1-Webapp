@@ -36,6 +36,7 @@ class ChatroomManager extends Component {
   async componentDidMount() {
     const { dispatch } = this.props;
     await dispatch(resetChatroomDelete());
+    await dispatch(resetChatroomLeave());
   }
 
   render() {

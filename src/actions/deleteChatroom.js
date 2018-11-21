@@ -53,6 +53,7 @@ export const deleteChatroom = (chatroomName) => {
     dispatch(deleteChatroomRequest());
     try{
       const { result, status } = await noDataRequest(`auth/chatroom/${chatroomName}/`, 'DELETE');
+      console.log('delete', result, status);
       
       if(status == 204){
         return dispatch(deleteChatroomSuccess())

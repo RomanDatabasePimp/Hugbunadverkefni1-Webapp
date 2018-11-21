@@ -84,6 +84,7 @@ class ChatroomForm extends Component {
     if(edit && chatroomName){
       await dispatch(getChatroom(chatroomName));
       const { chatroom } = this.props;
+      console.log(chatroom);
       const {
         displayName,
         description,
