@@ -7,6 +7,10 @@ import { noDataRequest } from '../../api';
 import { EROFS } from 'constants';
 import {Modal} from 'react-bootstrap';
 import ChatroomForm from '../ChatroomForm';
+import AdminInviter from '../AdminInviter/AdminInviter';
+import MemberInviter from '../MemberInviter/MemberInviter';
+import ChatroomManager from '../ChatroomManager';
+import { getUserData } from '../../actions/initialloadofapp';
 
 class ChatBouble extends Component {
   /* This will be a pretty sexy chat bouble it will have to poll the data
@@ -22,8 +26,9 @@ class ChatBouble extends Component {
     // we can use PropTypes to define what kind of json obj we want to recive
     chatroomName: PropTypes.string.isRequired,
     displayName: PropTypes.string,
+    userRelation: PropTypes.string.isRequired,
     lastMessageReceived:PropTypes.number,
-    lastRead: PropTypes.number
+    lastRead: PropTypes.number,
   }
 
   state = {
@@ -65,7 +70,7 @@ class ChatBouble extends Component {
      one chat window can be opened at a time, the component that overwrited the store last
      will display its chat */
   openNewChat() {
-    const { dispatch,chatroomName,displayName,lastMessageReceived} = this.props;
+    const { dispatch,chatroomName,displayName,lastMessageReceived } = this.props;
     this.state.lastReadState = lastMessageReceived;
     dispatch(openNewChat(chatroomName,displayName))
   }
@@ -76,7 +81,7 @@ class ChatBouble extends Component {
   }
 
 render() {
-    const {displayName,lastRead,lastMessageReceived,userRelation } = this.props;
+    const {displayName,lastRead,lastMessageReceived,userRelation,chatroomName } = this.props;
     const {newTimeStamp,lastMsgRecived,error} = this.state;
     // if the user has read the las,t msg we display the offline logo
     // else we show that he is oline
@@ -93,27 +98,6 @@ render() {
       chatNewMsg = lastRead < lastMessageReceived ? "online" : "offline";
     }
 
-    const canEdit = userRelation == "ADMIN" || userRelation == "OWNER";
-    const edit = canEdit ? (
-      <div>
-        <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
-        <Modal
-          show={this.state.chatroomManagerOpen}
-          onHide={ () => this.setState({ chatroomManagerOpen: false }) }
-          container={this}
-          aria-labelledby="contained-modal-title"
-        >
-          < Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title" className="blacktext">
-                Create a new chatroom
-              </Modal.Title>
-            </Modal.Header>
-          <Modal.Body className="blacktext">
-            <ChatroomForm></ChatroomForm>
-          </Modal.Body>
-        </Modal>
-      </div>
-    ) : (<p></p>);
 
     return (
       <div>
@@ -121,11 +105,34 @@ render() {
           <span className={chatNewMsg}></span>
           <img src="/img/wow.png" alt="the very wow logo" />
           <div className="meta">
-            <p className="name">{displayName}</p>
+            <p className="name">{displayName} ({chatroomName})</p>
           </div>
         </div>
         <div>
-          {edit}
+          <div>
+            <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
+            <Modal
+              show={this.state.chatroomManagerOpen}
+              onHide={ () => {
+                this.setState({ chatroomManagerOpen: false });
+                dispatchEvent(getUserData());
+              }}
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              < Modal.Header closeButton>
+                  <Modal.Title id="contained-modal-title" className="blacktext">
+                    Manage Chatroom
+                  </Modal.Title>
+                </Modal.Header>
+              <Modal.Body className="blacktext">
+                <ChatroomManager 
+                  chatroomName = {chatroomName} 
+                  userRelation = {userRelation}>
+                </ChatroomManager>
+              </Modal.Body>
+            </Modal>
+          </div>
         </div>
       </div>
     );

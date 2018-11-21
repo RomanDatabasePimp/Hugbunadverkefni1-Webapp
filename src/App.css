@@ -19,6 +19,10 @@
   color: red;
 }
 
+.success {
+  color: green;
+}
+
 .modal_form label{
   width: 75%;
 }

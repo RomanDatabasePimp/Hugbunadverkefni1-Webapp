@@ -6,6 +6,10 @@ import initialloadofapp from './initialloadofapp'
 import opennewchat from './opennewchat'
 import chatroom from './chatroom'
 import addAcceptAction from './addAcceptAction'
+import adminInvite from './adminInvite'
+import memberInvite from './memberInvite'
+import deleteChatroom from './deleteChatroom'
+import leaveChatroom from './leaveChatroom'
 
 /* Utaf store er eitt stór js object
   við tengjum alla reducera okkar saman 
@@ -17,5 +21,9 @@ export default combineReducers({
   initialloadofapp,
   opennewchat,
   chatroom,
-  addAcceptAction
+  addAcceptAction,
+  adminInvite,
+  memberInvite,
+  deleteChatroom,
+  leaveChatroom,
 });
