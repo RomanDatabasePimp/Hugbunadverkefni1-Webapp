@@ -10,6 +10,7 @@ import adminInvite from './adminInvite'
 import memberInvite from './memberInvite'
 import deleteChatroom from './deleteChatroom'
 import leaveChatroom from './leaveChatroom'
+import quitAdmin from './quitAdmin'
 
 /* Utaf store er eitt stór js object
   við tengjum alla reducera okkar saman 
@@ -26,4 +27,5 @@ export default combineReducers({
   memberInvite,
   deleteChatroom,
   leaveChatroom,
+  quitAdmin,
 });
