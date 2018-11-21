@@ -10,6 +10,7 @@ import ChatroomForm from '../ChatroomForm';
 import AdminInviter from '../AdminInviter/AdminInviter';
 import MemberInviter from '../MemberInviter/MemberInviter';
 import ChatroomManager from '../ChatroomManager';
+import { getUserData } from '../../actions/initialloadofapp';
 
 class ChatBouble extends Component {
   /* This will be a pretty sexy chat bouble it will have to poll the data
@@ -112,7 +113,10 @@ render() {
             <a onClick={() => {this.setState({chatroomManagerOpen: true})}} >Manage Chat</a>
             <Modal
               show={this.state.chatroomManagerOpen}
-              onHide={ () => this.setState({ chatroomManagerOpen: false }) }
+              onHide={ () => {
+                this.setState({ chatroomManagerOpen: false });
+                dispatchEvent(getUserData());
+              }}
               container={this}
               aria-labelledby="contained-modal-title"
             >
