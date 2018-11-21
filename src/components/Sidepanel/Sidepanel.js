@@ -72,15 +72,10 @@ class Sidepanel extends Component {
     dispatch(logoutUser());
   }
 
-  /* Usage : checkIfChatReoomCreated()
-      For  : nothing
-     After : checks if a new chatroom has been created
-             if it has then its added to the chatrooms so the user can see them */
-  checkIfChatReoomCreated(){
-    const { chatroom,dispatch } = this.props;
-    if(chatroom){
+
+  updateUserAfterEvent(){
+    const { dispatch } = this.props;
       dispatch(getUserData());
-    }
   }
 
   render() {
@@ -175,7 +170,7 @@ class Sidepanel extends Component {
           </div>
           <Modal
             show={this.state.friendsButtonOpen}
-            onHide={ () => this.setState({ friendsButtonOpen: false }) }
+            onHide={ () => {this.updateUserAfterEvent(); this.setState({ friendsButtonOpen: false })} }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -191,7 +186,7 @@ class Sidepanel extends Component {
 
           <Modal
             show={this.state.chatroomManagerOpen}
-            onHide={ () => {this.checkIfChatReoomCreated();this.setState({ chatroomManagerOpen: false }); } }
+            onHide={ () => {this.updateUserAfterEvent();this.setState({ chatroomManagerOpen: false }); } }
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -224,7 +219,6 @@ const mapStateToProps = (state) => {
     chatroomInvites:state.initialloadofapp.chatroomInvites,
     //chatroomRequests:state.initialloadofapp.chatroomRequests,
     chatrooms:state.initialloadofapp.chatrooms,
-    chatroom: state.chatroom.chatroom,
     friends:state.initialloadofapp.friends,
     friendRequestors:state.initialloadofapp.friendRequestors
   }
