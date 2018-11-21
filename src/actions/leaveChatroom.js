@@ -53,7 +53,7 @@ export const leaveChatroom = (chatroomName) => {
     dispatch(leaveChatroomRequest());
     try{
       const { result, status } = await noDataRequest(`auth/chatroom/${chatroomName}/leave/`, 'DELETE');
-      
+      console.log(result, status);
       if(status == 204){
         return dispatch(leaveChatroomSuccess())
       }

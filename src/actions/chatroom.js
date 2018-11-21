@@ -125,6 +125,7 @@ export const getChatroom = (chatroomName) => {
     dispatch(getChatroomRequest());
     try{
       const { result, status } = await noDataRequest(`auth/chatroom/${chatroomName}/`, 'GET');
+      console.log('get', result, status);
       if(result.hasOwnProperty('error')){
         return dispatch(getChatroomError(result.error));
       }

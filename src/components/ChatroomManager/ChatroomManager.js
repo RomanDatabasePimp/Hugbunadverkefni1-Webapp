@@ -10,6 +10,7 @@ import ChatroomViewer from '../ChatroomViewer';
 
 import { deleteChatroom, resetChatroomDelete } from '../../actions/deleteChatroom';
 import { leaveChatroom, resetChatroomLeave } from '../../actions/leaveChatroom';
+import { quitAdmin, resetAdminQuit } from '../../actions/quitAdmin';
 import { getUserData } from '../../actions/initialloadofapp';
 
 
@@ -33,9 +34,18 @@ class ChatroomManager extends Component {
     dispatch(getUserData());
   }
 
+  quitAdminHandler = async (e) => {
+    e.preventDefault();
+    const { dispatch, chatroomName } = this.props;
+    await dispatch(quitAdmin(chatroomName));
+    dispatch(getUserData());
+  }
+
   async componentDidMount() {
     const { dispatch } = this.props;
     await dispatch(resetChatroomDelete());
+    await dispatch(resetChatroomLeave());
+    await dispatch(resetAdminQuit());
   }
 
   render() {
@@ -103,6 +113,19 @@ class ChatroomManager extends Component {
         </form>
       </section>
     );
+    
+    const quitAdmin = (
+      <section className="modal_form">
+        <form onSubmit={this.quitAdminHandler}>
+          <div className="form-group">
+            <h2>Quit being an administrator</h2>
+          </div>
+          <div className="form-group">
+            <button><span>Quit being an administrator</span></button>
+          </div>
+        </form>
+      </section>
+    );
 
     return (
       <section>
@@ -116,8 +139,9 @@ class ChatroomManager extends Component {
         {isAdmin ? (<ChatroomForm edit={true} chatroomName={chatroomName}></ChatroomForm>) : (<p></p>) }
         {isAdmin ? (<MemberInviter chatroomName={chatroomName}></MemberInviter>) : (<p></p>) }
         {isOwner ? (<AdminInviter chatroomName={chatroomName}></AdminInviter>) : (<p></p>) }
-        {isOwner ? deleteChatroom : (<p></p>) }
+        {!isOwner && isAdmin ? quitAdmin : (<p></p>) }
         {!isOwner ? leaveChatroom : (<p></p>) }
+        {isOwner ? deleteChatroom : (<p></p>) }
       </section>
     );
 
