@@ -1,5 +1,5 @@
 import { datarequest, noDataRequest } from '../api';
-
+import { logoutUser } from './userActions';
 // for the creation of chatrooms
 export const CHATROOM_LEAVE_RESET = 'CHATROOM_LEAVE_RESET';
 export const CHATROOM_LEAVE_REQUEST = 'CHATROOM_LEAVE_REQUEST';
@@ -59,6 +59,12 @@ export const leaveChatroom = (chatroomName) => {
       }
       if(result.hasOwnProperty('error')){
         return dispatch(leaveChatroomError(result.error));
+      }
+      if(result.hasOwnProperty('message')) {
+        if(result.message === "JWT Token is missing" || result.message === "JWT Token is incorrect") {
+        console.log(result.message);
+        return dispatch(logoutUser());
+        }
       }
     } catch (e){
       return dispatch(leaveChatroomError(e));

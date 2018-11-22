@@ -1,5 +1,5 @@
 import { datarequest, noDataRequest } from '../api';
-
+import { logoutUser } from './userActions';
 // for the creation of chatrooms
 export const CHATROOM_RESET = 'CHATROOM_RESET';
 export const CREATE_CHATROOM_REQUEST = 'CREATE_CHATROOM_REQUEST';
@@ -129,6 +129,12 @@ export const getChatroom = (chatroomName) => {
       if(result.hasOwnProperty('error')){
         return dispatch(getChatroomError(result.error));
       }
+      if(result.hasOwnProperty('message')) {
+        if(result.message === "JWT Token is missing" || result.message === "JWT Token is incorrect") {
+        console.log(result.message);
+        return dispatch(logoutUser());
+        }
+      }
       return dispatch(getChatroomSuccess(result))
     } catch (e){
       return dispatch(getChatroomError(e));
@@ -144,6 +150,12 @@ export const createChatroom = (data) => {
 
       if(result.hasOwnProperty('error')){
         return dispatch(createChatroomError(result.error));
+      }
+      if(result.hasOwnProperty('message')) {
+        if(result.message === "JWT Token is missing" || result.message === "JWT Token is incorrect") {
+        console.log(result.message);
+        return dispatch(logoutUser());
+        }
       }
       
       return dispatch(createChatroomSuccess(result))
@@ -163,6 +175,12 @@ export const updateChatroom = (chatroomName, data) => {
 
       if(result.hasOwnProperty('error')){
         return dispatch(updateChatroomError(result.error));
+      }
+      if(result.hasOwnProperty('message')) {
+        if(result.message === "JWT Token is missing" || result.message === "JWT Token is incorrect") {
+        console.log(result.message);
+        return dispatch(logoutUser());
+        }
       }
       
       return dispatch(updateChatroomSuccess(result))
