@@ -41,7 +41,9 @@ export async function noDataRequest(endpoint, method) {
   let result = await response.json();
   /* Spring boot has its own handler for many various unimplemented or server error responses so we need 
     implement somekind of catch for that so our react wont go ups  its own ass*/
-  if(result.hasOwnProperty("message")){ return { result: null, status: response.status }; }
+  if(result.hasOwnProperty("message")){
+    return { result: {message: result.message}, status: response.status };
+  }
   // check whitch wrapper do we peel
   if(response.status >= 200 && response.status < 300 ) { result = result.GoodResp; }
   if(response.status >= 400 && response.status < 500 ) { result = result.BadResp; }
@@ -82,7 +84,9 @@ export async function datarequest(endpoint, data, method) {
   // same proccess as in noDataRequest
   let result = await response.json();
   // spring boot catching server crashes etc...
-  if(result.hasOwnProperty("message")){ return { result: null, status: response.status }; }
+  if(result.hasOwnProperty("message")){
+    return { result: {message: result.message}, status: response.status };
+  }
   // check whitch wrapper do we peel
   if(response.status >= 200 && response.status < 300 ) { result = result.GoodResp; }
   if(response.status >= 400 && response.status < 500 ) { result = result.BadResp; }

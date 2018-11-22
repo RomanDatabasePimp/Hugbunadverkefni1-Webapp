@@ -1,5 +1,5 @@
 import { noDataRequest, datarequest } from '../api';
-
+import { logoutUser } from './userActions';
 /* This class is repsonsible for maintaining states for fetching  everything about the user */
 
 /* You can debade that this action should be in userActions.js and it should but the 
@@ -90,13 +90,20 @@ export const userInfoStateReset = () => { return async (dispatch) => {  return d
 export const getUserData = () => {
   return async (dispatch) => {
     dispatch(requestUserInformation());
-
+    
     let request;
     /* try to fetch the data from api */
     try {
       request = await noDataRequest('auth/user/getallrelations', 'GET');
     } catch (e) {
       return dispatch(userInformationError(e));
+    }
+   
+    if(request.result.hasOwnProperty('message')) {
+      if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+      console.log(request.result.message);
+      return dispatch(logoutUser());
+      }
     }
     
     if(request.result.hasOwnProperty('error')){

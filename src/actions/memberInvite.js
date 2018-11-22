@@ -1,4 +1,5 @@
 import { datarequest, noDataRequest } from '../api';
+import { logoutUser } from './userActions';
 
 // for the creation of chatrooms
 export const MEMBER_INVITE_RESET = 'MEMBER_INVITE_RESET';
@@ -60,6 +61,12 @@ export const sendMemberInvite = (chatroomName, username) => {
       }
       if(result.hasOwnProperty('error')){
         return dispatch(memberInviteError(result.error));
+      }
+      if(result.hasOwnProperty('message')) {
+        if(result.message === "JWT Token is missing" || result.message === "JWT Token is incorrect") {
+        console.log(result.message);
+        return dispatch(logoutUser());
+        }
       }
     } catch (e){
       return dispatch(memberInviteError(e));

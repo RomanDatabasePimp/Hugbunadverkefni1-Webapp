@@ -1,4 +1,5 @@
 import { datarequest,noDataRequest } from '../api';
+import { logoutUser } from './userActions';
 /* the way we add and accept friends is the same , i.e same function calls
    but the server responds differantly so we basicly one action that 
    handles two things */
@@ -61,6 +62,12 @@ export const addOrAcceptUser = (usr,method) => {
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
         }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
+        }
       }
       return dispatch(addOrAcceptSuccess());
 
@@ -83,6 +90,12 @@ export const acceptChatInv = (val) => {
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
         }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
+        }
       }
       return dispatch(addOrAcceptSuccess());
     } catch (e){
@@ -104,6 +117,12 @@ export const rejectChatInv = (val) => {
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
         }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
+        }
       }
       return dispatch(addOrAcceptSuccess());
     } catch (e){
@@ -124,6 +143,12 @@ export const acceptAdminChatInv = (val) => {
       if(request.result){
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
+        }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
         }
       }
       return dispatch(addOrAcceptSuccess());
@@ -147,6 +172,12 @@ export const rejectAdminChatInv = (val) => {
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
         }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
+        }
       }
       return dispatch(addOrAcceptSuccess());
     } catch (e){
@@ -168,6 +199,12 @@ export const rejectFriend = (usr) => {
       if(request.result){
         if(request.result.hasOwnProperty('error')) {
           return dispatch(addOrAcceptError(request.result.error));
+        }
+        if(request.result.hasOwnProperty('message')) {
+          if(request.result.message === "JWT Token is missing" || request.result.message === "JWT Token is incorrect") {
+          console.log(request.result.message);
+          return dispatch(logoutUser());
+          }
         }
       }
       return dispatch(addOrAcceptSuccess());
