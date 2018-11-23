@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addOrAcceptUser, addOrAccepReset} from '../../actions/addAcceptAction';
+import { addOrAcceptUser, addOrAccepReset, clientSideError} from '../../actions/addAcceptAction';
 
 class AddFriendsFrom extends Component {
 
@@ -32,7 +32,11 @@ class AddFriendsFrom extends Component {
     e.preventDefault();
     const { dispatch } = this.props;
     const { newUser } = this.state;
-    dispatch(addOrAcceptUser(newUser,"POST"));
+    if(/^[A-Za-z0-9ÁáÉéðÐþÞæÆóÓöÖ]+$/.test(newUser)){
+      dispatch(addOrAcceptUser(newUser,"POST"));
+      return;
+    }
+    dispatch(clientSideError("Username must be valid"));
   }
 
   render() {
