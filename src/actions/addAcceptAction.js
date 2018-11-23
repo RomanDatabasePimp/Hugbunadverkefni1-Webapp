@@ -49,6 +49,15 @@ function addOrAcceptResetState() {
 /* SOORRYY :(((( LITILL TIMI VAR EFTIR HER I FEEL ASHAMED TO DO THIS :( 
     HAVE MERCY ON ME  */
 
+/* Usage : dispact(clientSideError(err))
+     FOR : inp is a error u want to be displayed
+    AFTER: dispatches error state with the given error */
+export const clientSideError = (err) => {
+  return async (dispatch) => {
+    dispatch(addOrAcceptError(err))
+  }
+}
+
 /* Usage : dispatch(addOrAcceptUser(usr,method))
     For  : usr is the username of the add er accepted client
     After: sends a HTTP POST REQUEST /auth/user/friends/{usr} 
