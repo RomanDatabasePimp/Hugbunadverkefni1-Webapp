@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Modal} from 'react-bootstrap';
-
 import ChatroomForm from '../ChatroomForm';
 import AdminInviter from '../AdminInviter';
 import MemberInviter from '../MemberInviter';
 import ChatroomViewer from '../ChatroomViewer';
-
 import { deleteChatroom, resetChatroomDelete } from '../../actions/deleteChatroom';
 import { leaveChatroom, resetChatroomLeave } from '../../actions/leaveChatroom';
 import { quitAdmin, resetAdminQuit } from '../../actions/quitAdmin';
@@ -16,8 +13,8 @@ import { getUserData } from '../../actions/initialloadofapp';
 
 class ChatroomManager extends Component {
   static propTypes = {
-    chatroomName: PropTypes.string.required,
-    userRelation: PropTypes.string.required,
+    chatroomName: PropTypes.string.isRequired,
+    userRelation: PropTypes.string.isRequired,
   }
 
   deleteChatroomHandler = async (e) => {

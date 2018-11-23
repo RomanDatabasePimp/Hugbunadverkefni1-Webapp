@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes, { number } from 'prop-types';
+import PropTypes from 'prop-types';
+import { getUserData } from '../../actions/initialloadofapp';
 import { logoutUser  } from '../../actions/userActions';
 import { datarequest,noDataRequest } from '../../api';
 
@@ -80,6 +81,10 @@ class ChatMessageContainer extends Component {
       
       // here we need to fetch all the new messages from a offest
       const chats = await noDataRequest(`auth/chatroom/${chatid}/messages/${myOffestFRONT}`,"GET");
+      if(chats.status === 404){
+        dispatch(getUserData());
+        return;
+      }
       if(chats.status >= 400 || chats.status >= 500) {
         console.log("something went wrong")
         dispatch(logoutUser());

@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import { openNewChat } from '../../actions/opennewchat';
 import { logoutUser  } from '../../actions/userActions';
 import { noDataRequest } from '../../api';
-import { EROFS } from 'constants';
 import {Modal} from 'react-bootstrap';
-import ChatroomForm from '../ChatroomForm';
-import AdminInviter from '../AdminInviter/AdminInviter';
-import MemberInviter from '../MemberInviter/MemberInviter';
 import { getUserData } from '../../actions/initialloadofapp';
 import ChatroomManager from '../ChatroomManager';
 
@@ -51,17 +47,23 @@ class ChatBouble extends Component {
      have what ever was stored last, and in the process they will be rewriting the shit
      out of each other */
   async updateChat() {
-    const {chatroomName} = this.props;
+    const {chatroomName,dispatch} = this.props;
     const res = await noDataRequest(`auth/chatroom/${chatroomName}/membership`,"GET");
     if(!res) {
       this.setState({error : "something went very wrong server side"});
       return;
     }
+
+    if(res.status === 404){
+      dispatch(getUserData());
+    }
+    
     // if error we update the state
     if(res.result.hasOwnProperty("error")) {
       this.setState({error : res.result.error});
       return;
     }
+
     this.setState({newTimeStamp : res.result.lastMessageReceived,
       lastMsgRecived: res.result.lastRead, error:null});
   }
