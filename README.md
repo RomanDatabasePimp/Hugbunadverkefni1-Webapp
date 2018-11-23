@@ -1,4 +1,8 @@
 # Hugbunadverkefni 1 Web app
+Members: 
+* Róman (ror9@hi.is)
+* Vilhelm (vilhelml@hi.is)
+* Davíð (dah38@hi.is)
 
 ## About Web app
 This is the front end of our app. The front end is written in React and 
