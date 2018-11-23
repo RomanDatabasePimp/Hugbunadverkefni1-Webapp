@@ -15,7 +15,8 @@ follow these steps below to deploy a local version of the web app. <br>
 2. Clone this project on to your machine
 3. Default settings of web app
    - 3.1 Runs on Port : 3000
-   - 3.2 Communicates to back end server on : http://localhost:9090/
+   - 3.2 Communicates to back end server on : http://localhost:9090/ <br>
+     dont change this since the backend is configured only to accept localhost:3000 due to cors headers
 4. If you would like to change the default settings then you have to create a .env file and declare the following
    - 4.1 PORT  : change the port of the web app
    - 4.2 APP_SERVICE_URL : changes the communication to the backend, MAKE SURE IT ENDS WITH / 
